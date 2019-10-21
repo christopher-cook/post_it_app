@@ -45,8 +45,19 @@ public class UserDaoImpl implements UserDao {
   @Override
   public User login(User user) {
 
-    // TODO Auto-generated method stub
-    return null;
+	  User savedUser = null;
+		
+		Session session = sessionFactory.getCurrentSession();
+		try {
+			session.beginTransaction();
+			
+			savedUser = (User)session.createQuery("FROM User u WHERE u.username = '" + 
+					user.getUsername() + "'").getSingleResult();
+		} finally {
+			session.close();
+		}
+		
+		return savedUser;
   }
 
   @Override

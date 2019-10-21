@@ -4,7 +4,9 @@
 ### Technologies Implemented
 ---
 
-
+ - Dependencies used:
+ 
+ 
 ### Approach
 
 The basic approach 

@@ -96,9 +96,7 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public User getUserByUsername(String username) {
-
-    // TODO Auto-generated method stub
-    return null;
+	  return userDao.getUserByUsername(username);
   }
 
   @Override

@@ -2,6 +2,7 @@ package com.postit.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,12 +21,20 @@ public class UserController {
 
   @PostMapping("/signup")
   public ResponseEntity<?> signup(@RequestBody User user) {
-
+	  User nameSearch = userService.getUserByUsername(user.getUsername());
+	  if(nameSearch != null) {
+		  return ResponseEntity.badRequest().body("user already exists");
+	  }
     return ResponseEntity.ok(new JwtResponse(userService.signup(user)));
   }
   
   @PostMapping("/login")
   public ResponseEntity<?> login(@RequestBody User user) {
-      return ResponseEntity.ok(new JwtResponse(userService.login(user)));
+	  String token = userService.login(user);
+	  if(token == null) {
+      return ResponseEntity.badRequest().body("username/password invalid");
   }
+	  return ResponseEntity.ok(new JwtResponse(token));
+  }
+ 
 }

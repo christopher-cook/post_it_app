@@ -35,7 +35,9 @@ public class UserDaoImpl implements UserDao {
       session.save(user);
 
       session.getTransaction().commit();
-    } finally {
+    } catch(Exception e) {
+    	System.out.println("signup bad request");
+    }finally {
       session.close();
     }
 
@@ -50,7 +52,7 @@ public class UserDaoImpl implements UserDao {
 		Session session = sessionFactory.getCurrentSession();
 		try {
 			session.beginTransaction();
-			
+		
 			savedUser = (User)session.createQuery("FROM User u WHERE u.username = '" + 
 					user.getUsername() + "'").getSingleResult();
 		} finally {

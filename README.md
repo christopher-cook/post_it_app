@@ -4,7 +4,9 @@
 ### Technologies Implemented
 ---
 
-
+ - Dependencies used:
+ 
+ 
 ### Approach
 
 The basic approach 
@@ -16,6 +18,11 @@ The basic approach
 * [Trello]()
   * individual task assignments
 ---
+
+challenges:
+
+1. user signup needs a user role to obtain an authority level, but we designed not to expose the user role setting to regular user, so we used a default role 'ROLE_USER' for user signing up and only Admin can user /role url to grant any other level of authorities.
+
 
 
 ### Contributors

@@ -30,6 +30,9 @@ public class User {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long userId;
 
+  @Column(name = "email", unique = true, nullable = false)
+  private String email;
+
   @Column(name = "username", unique = true, nullable = false)
   private String username;
 
@@ -120,6 +123,16 @@ public class User {
   public void setUserRole(UserRole userRole) {
 
     this.userRole = userRole;
+  }
+
+  public String getEmail() {
+
+    return email;
+  }
+
+  public void setEmail(String email) {
+
+    this.email = email;
   }
 
 }

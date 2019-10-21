@@ -21,10 +21,17 @@ public class UserController {
 
   @PostMapping("/signup")
   public ResponseEntity<?> signup(@RequestBody User user) {
+      if(user.getEmail() == null || user.getUsername() == null || user.getPassword() == null){
+        return ResponseEntity.badRequest().body("invalid arguments");
+      }
 	  User nameSearch = userService.getUserByUsername(user.getUsername());
 	  if(nameSearch != null) {
-		  return ResponseEntity.badRequest().body("user already exists");
+		  return ResponseEntity.badRequest().body("username already exists");
 	  }
+	  User emailSearch = userService.getUserByEmail(user.getEmail());
+      if(emailSearch != null) {
+          return ResponseEntity.badRequest().body("email already exists");
+      }
     return ResponseEntity.ok(new JwtResponse(userService.signup(user)));
   }
   

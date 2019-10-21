@@ -31,13 +31,12 @@ public class UserDaoImpl implements UserDao {
       session.beginTransaction();
 
       user.setUserRole(userRole);
-
       session.save(user);
 
       session.getTransaction().commit();
-    } catch(Exception e) {
-    	System.out.println("signup bad request");
-    }finally {
+    } catch (Exception e) {
+      System.out.println("signup bad request");
+    } finally {
       session.close();
     }
 
@@ -47,19 +46,20 @@ public class UserDaoImpl implements UserDao {
   @Override
   public User login(User user) {
 
-	  User savedUser = null;
-		
-		Session session = sessionFactory.getCurrentSession();
-		try {
-			session.beginTransaction();
-		
-			savedUser = (User)session.createQuery("FROM User u WHERE u.username = '" + 
-					user.getUsername() + "'").getSingleResult();
-		} finally {
-			session.close();
-		}
-		
-		return savedUser;
+    User savedUser = null;
+
+    Session session = sessionFactory.getCurrentSession();
+    try {
+      session.beginTransaction();
+
+      savedUser =
+          (User) session.createQuery("FROM User u WHERE u.username = '" + user.getUsername() + "'")
+              .getSingleResult();
+    } finally {
+      session.close();
+    }
+
+    return savedUser;
   }
 
   @Override
@@ -100,6 +100,25 @@ public class UserDaoImpl implements UserDao {
 
     // TODO Auto-generated method stub
     return null;
+  }
+
+  @Override
+  public User getUserByEmail(String email) {
+
+    User user = null;
+
+    Session session = sessionFactory.getCurrentSession();
+
+    try {
+      session.beginTransaction();
+
+      user =
+          (User) session.createQuery("FROM User u WHERE u.email = '" + email + "'").uniqueResult();
+    } finally {
+      session.close();
+    }
+
+    return user;
   }
 
 }

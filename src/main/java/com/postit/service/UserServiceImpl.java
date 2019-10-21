@@ -89,9 +89,8 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public List<User> listUsers() {
-
-    // TODO Auto-generated method stub
-    return null;
+	  return userDao.listUsers();
+    
   }
 
   @Override

@@ -72,8 +72,17 @@ public class UserDaoImpl implements UserDao {
   @Override
   public List<User> listUsers() {
 
-    // TODO Auto-generated method stub
-    return null;
+    List<User> allUsers = null;	//init list
+    Session session = sessionFactory.getCurrentSession();
+    
+    try {
+    	session.beginTransaction();
+    	
+    	allUsers = session.createQuery("FROM User").getResultList();
+    } finally {
+    	session.close();
+    }
+    return allUsers;
   }
 
   @Override

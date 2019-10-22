@@ -36,7 +36,7 @@ public class UserController {
       if(emailSearch != null) {
           return ResponseEntity.badRequest().body("email already exists");
       }
-    return ResponseEntity.ok(new JwtResponse(userService.signup(user)));
+    return ResponseEntity.ok(new JwtResponse(userService.signup(user), user.getUsername()));
   }
   
   @PostMapping("/login")
@@ -45,7 +45,7 @@ public class UserController {
 	  if(token == null) {
       return ResponseEntity.badRequest().body("username/password invalid");
   }
-	  return ResponseEntity.ok(new JwtResponse(token));
+	  return ResponseEntity.ok(new JwtResponse(token, user.getUsername()));
   }
  
   @GetMapping("/list")

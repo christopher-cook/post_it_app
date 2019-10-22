@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.postit.entity.UserRole;
+import com.postit.entity.Post;
 import com.postit.entity.User;
 
 @Repository
@@ -65,15 +66,15 @@ public class UserDaoImpl implements UserDao {
   @Override
   public List<User> listUsers() {
 
-    List<User> allUsers = null;	//init list
+    List<User> allUsers = null; // init list
     Session session = sessionFactory.getCurrentSession();
-    
+
     try {
-    	session.beginTransaction();
-    	
-    	allUsers = session.createQuery("FROM User").getResultList();
+      session.beginTransaction();
+
+      allUsers = session.createQuery("FROM User").getResultList();
     } finally {
-    	session.close();
+      session.close();
     }
     return allUsers;
   }
@@ -100,18 +101,19 @@ public class UserDaoImpl implements UserDao {
   @Override
   public User getUserByUserId(Long userId) {
 
-	  	User user = null;
-	  	
-	  	Session session = sessionFactory.getCurrentSession();
-	  	
-	  	try {
-	  		session.beginTransaction();
-	  		
-	  		user = (User)session.createQuery("FROM User u WHERE u.userId = '" + userId + "'").uniqueResult();
-	  	} finally {
-	  		session.close();
-	  	}
-	  	return user;
+    User user = null;
+
+    Session session = sessionFactory.getCurrentSession();
+
+    try {
+      session.beginTransaction();
+
+      user = (User) session.createQuery("FROM User u WHERE u.userId = '" + userId + "'")
+          .uniqueResult();
+    } finally {
+      session.close();
+    }
+    return user;
   }
 
   @Override
@@ -133,22 +135,39 @@ public class UserDaoImpl implements UserDao {
     return user;
   }
 
-@Override
-public Long deleteUser(Long userId) {
-	Session session = sessionFactory.getCurrentSession();
-	User user = null;
-	
-	try {
-		session.beginTransaction();
-		
-		user = session.get(User.class, userId);
-		session.delete(user);
-		
-		session.getTransaction().commit();
-	} finally {
-		session.close();
-	}
-	return userId;
-}
+  @Override
+  public Long deleteUser(Long userId) {
+
+    Session session = sessionFactory.getCurrentSession();
+    User user = null;
+
+    try {
+      session.beginTransaction();
+
+      user = session.get(User.class, userId);
+      session.delete(user);
+
+      session.getTransaction().commit();
+    } finally {
+      session.close();
+    }
+    return userId;
+  }
+
+  @Override
+  public List<Post> getPostsByUser(String username) {
+
+    List<Post> postList = null;
+    Session session = sessionFactory.getCurrentSession();
+    try {
+      session.beginTransaction();
+      User user = (User) session.createQuery("FROM User u WHERE u.username = '" + username + "'")
+          .uniqueResult();
+      postList = user.getPostList();
+    } finally {
+      session.close();
+    }
+    return postList;
+  }
 
 }

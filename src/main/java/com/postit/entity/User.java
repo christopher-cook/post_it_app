@@ -55,7 +55,7 @@ public class User {
   private UserRole userRole;
 
   @JsonIgnore
-  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL,  fetch = FetchType.EAGER)
   private List<Post> postList;
 
   @JsonIgnore

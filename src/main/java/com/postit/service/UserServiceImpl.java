@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import com.postit.config.JwtUtil;
 import com.postit.dao.UserDao;
+import com.postit.entity.Post;
 import com.postit.entity.User;
 import com.postit.entity.UserRole;
 
@@ -46,7 +47,7 @@ public class UserServiceImpl implements UserService {
   private List<GrantedAuthority> getGrantedAuthorities(User user) {
 
     List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
-    
+
     authorities.add(new SimpleGrantedAuthority(user.getUserRole().getName()));
 
     return authorities;
@@ -68,44 +69,53 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public String login(User user) {
-	  User foundUser = userDao.login(user);
-		if(foundUser != null && 
-				foundUser.getUserId() != null && 
-				bCryptPasswordEncoder.matches(user.getPassword(), foundUser.getPassword())) {
-		    UserDetails userDetails = loadUserByUsername(foundUser.getUsername());
-		    
-		    return jwtUtil.generateToken(userDetails);
-		}
-      	
-		return null;
+
+    User foundUser = userDao.login(user);
+    if (foundUser != null && foundUser.getUserId() != null
+        && bCryptPasswordEncoder.matches(user.getPassword(), foundUser.getPassword())) {
+      UserDetails userDetails = loadUserByUsername(foundUser.getUsername());
+
+      return jwtUtil.generateToken(userDetails);
+    }
+
+    return null;
   }
 
   @Override
   public Long deleteUser(Long userId) {
-	  return userDao.deleteUser(userId);
+
+    return userDao.deleteUser(userId);
   }
 
   @Override
   public List<User> listUsers() {
-	  return userDao.listUsers();
-    
+
+    return userDao.listUsers();
+
   }
 
   @Override
   public User getUserByUsername(String username) {
-	  return userDao.getUserByUsername(username);
+
+    return userDao.getUserByUsername(username);
   }
 
   @Override
   public User getUserByUserId(Long userId) {
 
-   return userDao.getUserByUserId(userId);
+    return userDao.getUserByUserId(userId);
   }
 
   @Override
   public User getUserByEmail(String email) {
 
     return userDao.getUserByEmail(email);
+  }
+
+  @Override
+  public List<Post> getPostsByUser(String username) {
+
+    return userDao.getPostsByUser(username);
   }
 
 }

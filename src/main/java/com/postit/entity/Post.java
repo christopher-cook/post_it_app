@@ -15,6 +15,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
 @Table(name = "posts")
@@ -30,6 +31,7 @@ public class Post {
   @Column(name = "description")
   private String description;
   
+  @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
   @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
   @JoinColumn(name = "post_user_id")
   private User user;

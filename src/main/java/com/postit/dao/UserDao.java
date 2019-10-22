@@ -2,6 +2,7 @@ package com.postit.dao;
 
 import java.util.List;
 
+import com.postit.entity.Post;
 import com.postit.entity.User;
 
 public interface UserDao {
@@ -19,4 +20,6 @@ public interface UserDao {
   public User getUserByUserId(Long userId);
   
   public User getUserByEmail(String email);
+
+  public List<Post> getPostsByUser(String username);
 }

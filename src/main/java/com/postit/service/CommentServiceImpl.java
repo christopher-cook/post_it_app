@@ -16,13 +16,12 @@ public class CommentServiceImpl implements CommentService{
 	
 	@Override
 	public List<Comment> listComments() {
-		// TODO Auto-generated method stub
 		return commentDao.listComments();
 	}
 
 	@Override
-	public Comment createComment(Comment comment) {
-		return commentDao.createComment(comment);
+	public Comment createComment(String username, Comment comment, Long postId) {
+		return commentDao.createComment(username, comment, postId);
 	}
 
 	@Override

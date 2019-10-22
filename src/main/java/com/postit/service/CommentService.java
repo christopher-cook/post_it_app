@@ -7,9 +7,7 @@ import com.postit.entity.Comment;
 public interface CommentService {
 	public List<Comment> listComments();
 
-	public Comment createComment(Comment comment);
-
-//	public Comment getComment(Comment comment);
+	public Comment createComment(String username, Comment comment, Long postId);
 
 	public Long deleteComment(Long commentId);
 	

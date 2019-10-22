@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.postit.entity.Comment;
+import com.postit.entity.User;
+import com.postit.entity.Post;
 
 
 @Repository
@@ -17,7 +19,7 @@ public class CommentDaoImpl implements CommentDao{
 	private SessionFactory sessionFactory;
 	
 	@Autowired
-	private CommentDao commentDao;
+	private UserDao userDao;
 	
 	@Override
 	public List<Comment> listComments() {
@@ -38,11 +40,17 @@ public class CommentDaoImpl implements CommentDao{
 	}
 
 	@Override
-	public Comment createComment(Comment comment) {
+	public Comment createComment(String username, Comment comment, Long postId) {
+		User user = userDao.getUserByUsername(username);
+		
+		comment.setUser(user);
+
 		Session session = sessionFactory.getCurrentSession();
 		
 		try {
 			session.beginTransaction();
+			Post post = session.get(Post.class, postId);
+			comment.setPost(post);
 			session.save(comment);
 			session.getTransaction().commit();
 		} finally {

@@ -25,4 +25,6 @@ public interface UserService extends UserDetailsService {
   public User getUserByEmail(String email);
 
   public List<Post> getPostsByUser(String username);
+
+  public List<Comment> getCommentsByUser(String username);
 }

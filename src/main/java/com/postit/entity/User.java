@@ -59,7 +59,7 @@ public class User {
   private List<Post> postList;
 
   @JsonIgnore
-  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)//
   private List<Comment> commentList;
 
   public Long getUserId() {

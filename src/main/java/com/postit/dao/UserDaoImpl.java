@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.postit.entity.UserRole;
+import com.postit.entity.Comment;
 import com.postit.entity.Post;
 import com.postit.entity.User;
 
@@ -169,5 +170,22 @@ public class UserDaoImpl implements UserDao {
     }
     return postList;
   }
+
+@Override
+public List<Comment> getCommentsByUser(String username) {
+	List<Comment> commentList = null;
+	
+	Session session = sessionFactory.getCurrentSession();
+	try {
+		session.beginTransaction();
+		User user = (User) session.createQuery("FROM User u WHERE u.username = '" + username + "'")
+				.uniqueResult();
+		commentList = user.getCommentList();
+		
+	} finally {
+		session.close();
+	}
+	return commentList;
+}
 
 }

@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import com.postit.config.JwtUtil;
 import com.postit.dao.UserDao;
+import com.postit.entity.Comment;
 import com.postit.entity.Post;
 import com.postit.entity.User;
 import com.postit.entity.UserRole;
@@ -117,5 +118,12 @@ public class UserServiceImpl implements UserService {
 
     return userDao.getPostsByUser(username);
   }
+
+@Override
+public List<Comment> getCommentsByUser(String username) {
+	
+	return userDao.getCommentsByUser(username);
+
+}
 
 }

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.postit.entity.Comment;
 import com.postit.entity.JwtResponse;
 import com.postit.entity.Post;
 import com.postit.entity.User;
@@ -79,4 +80,17 @@ public class UserController {
     String username = auth.getName();
     return userService.getPostsByUser(username);
   }
+  
+  @GetMapping("/comment")
+  public List<Comment> getCommentsByUser(Authentication auth) {
+	  
+	  if(auth == null) {
+		  return null;
+	  }
+	  String username = auth.getName();
+	  return userService.getCommentsByUser(username);
+  }
 }
+
+
+

@@ -24,6 +24,7 @@ public class Comment {
   @Column(name = "text")
   private String text;
   
+  @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
   @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
   @JoinColumn(name = "comment_user_id", nullable=false)
   private User user;

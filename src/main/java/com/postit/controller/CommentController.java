@@ -32,8 +32,12 @@ public class CommentController {
 	
 	
 	@DeleteMapping("/{commentId}")
-	public Long deleteComment(@RequestBody Long commentId) {
-		return commentService.deleteComment(commentId);
+	public Long deleteComment(Authentication auth, @PathVariable Long commentId) {
+		if(auth == null) {
+			return 0L;
+		}
+		String username = auth.getName();
+		return commentService.deleteComment(username, commentId);
 	}
 	
 }

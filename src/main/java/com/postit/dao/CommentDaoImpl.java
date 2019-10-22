@@ -60,7 +60,7 @@ public class CommentDaoImpl implements CommentDao{
 	}
 
 	@Override
-	public Long deleteComment(Long commentId) {
+	public Long deleteComment(String username, Long commentId) {
 		Session session = sessionFactory.getCurrentSession();
 		
 		Comment comment = null;
@@ -69,8 +69,13 @@ public class CommentDaoImpl implements CommentDao{
 			session.beginTransaction();
 			
 			comment = session.get(Comment.class, commentId);
-			session.delete(comment);
-			session.getTransaction().commit();
+			if(comment.getUser().getUsername().equals(username)) {
+				session.delete(comment);
+				session.getTransaction().commit();
+			}else {
+				commentId = 0l;
+			}
+			
 		} finally {
 			session.close();
 		}

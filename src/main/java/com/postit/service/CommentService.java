@@ -9,6 +9,6 @@ public interface CommentService {
 
 	public Comment createComment(String username, Comment comment, Long postId);
 
-	public Long deleteComment(Long commentId);
+	public Long deleteComment(String username, Long commentId);
 	
 }

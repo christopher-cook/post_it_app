@@ -25,8 +25,8 @@ public class CommentServiceImpl implements CommentService{
 	}
 
 	@Override
-	public Long deleteComment(Long commentId) {
-		return commentDao.deleteComment(commentId);
+	public Long deleteComment(String username, Long commentId) {
+		return commentDao.deleteComment(username, commentId);
 	}
 
 }

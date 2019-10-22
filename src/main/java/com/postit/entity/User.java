@@ -18,11 +18,13 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.postit.entity.UserRole;
 import com.postit.entity.UserProfile;
 
 @Entity
 @Table(name = "users")
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class User {
 
   @Id

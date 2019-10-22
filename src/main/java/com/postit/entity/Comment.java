@@ -22,11 +22,11 @@ public class Comment {
   private String text;
   
   @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
-  @JoinColumn(name = "comment_user_id")
+  @JoinColumn(name = "comment_user_id", nullable=false)
   private User user;
   
   @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
-  @JoinColumn(name = "comment_post_id")
+  @JoinColumn(name = "comment_post_id", nullable=false)
   private Post post;
 
   

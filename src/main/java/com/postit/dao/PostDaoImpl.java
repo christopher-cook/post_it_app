@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.postit.entity.User;
+import com.postit.entity.Comment;
 import com.postit.entity.Post;
 
 @Repository
@@ -76,4 +77,18 @@ public class PostDaoImpl implements PostDao {
     return postList;
   }
 
+	@Override
+	public List<Comment> getCommentsByPostId(Long postId) {
+		List<Comment> commentList = null;
+		
+		Session session = sessionFactory.getCurrentSession();
+		try {
+			session.beginTransaction();
+			Post post = session.get(Post.class,  postId);
+			commentList = post.getCommentList();
+		} finally {
+			session.close();
+		}
+		return commentList;
+	}
 }

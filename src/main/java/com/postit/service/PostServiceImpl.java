@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.postit.dao.PostDao;
+import com.postit.entity.Comment;
 import com.postit.entity.Post;
 import com.postit.entity.User;
 
@@ -34,5 +35,10 @@ public class PostServiceImpl implements PostService {
     List<Post> postList = postDao.listPosts();
     return postList;
   }
+
+@Override
+public List<Comment> getCommentsByPostId(Long postId) {
+	return postDao.getCommentsByPostId(postId);
+}
 
 }

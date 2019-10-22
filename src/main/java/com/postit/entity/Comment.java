@@ -10,6 +10,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 @Entity
 @Table(name = "comments")
 public class Comment {
@@ -25,6 +28,7 @@ public class Comment {
   @JoinColumn(name = "comment_user_id", nullable=false)
   private User user;
   
+  @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
   @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
   @JoinColumn(name = "comment_post_id", nullable=false)
   private Post post;

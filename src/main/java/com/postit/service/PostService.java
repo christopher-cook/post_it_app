@@ -2,6 +2,7 @@ package com.postit.service;
 
 import java.util.List;
 
+import com.postit.entity.Comment;
 import com.postit.entity.Post;
 
 public interface PostService {
@@ -11,4 +12,6 @@ public interface PostService {
   public Long deletePostByPostId(String username, Long postId);
   
   public List<Post> listPosts();
+
+  public List<Comment> getCommentsByPostId(Long postId);
 }

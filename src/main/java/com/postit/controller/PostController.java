@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.postit.entity.Comment;
 import com.postit.entity.Post;
 import com.postit.service.PostService;
 
@@ -50,4 +51,10 @@ public class PostController {
   public List<Post> listPosts() {
     return postService.listPosts();
   }
+  
+  @GetMapping("/{postId}/comment")
+  public List<Comment> getCommentsByPostId(@PathVariable Long postId) {
+	return postService.getCommentsByPostId(postId);
+  }
+  
 }

@@ -19,10 +19,6 @@ public class PostServiceImpl implements PostService {
   public Post createPost(String username, Post post) {
 
     Post savedPost = postDao.createPost(username, post);
-    // expose only username;
-    User user = new User();
-    user.setUsername(username);
-    savedPost.setUser(user);
     return savedPost;
   }
 
@@ -36,13 +32,6 @@ public class PostServiceImpl implements PostService {
   public List<Post> listPosts() {
 
     List<Post> postList = postDao.listPosts();
-    // expose only the username
-    for (Post post : postList) {
-      String username = post.getUser().getUsername();
-      User user = new User();
-      user.setUsername(username);
-      post.setUser(user);
-    }
     return postList;
   }
 

@@ -19,6 +19,7 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.postit.entity.UserRole;
 import com.postit.entity.UserProfile;
 
@@ -33,20 +34,24 @@ public class User {
   private Long userId;
 
   @Column(name = "email", unique = true, nullable = false)
+  @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
   private String email;
 
   @Column(name = "username", unique = true, nullable = false)
   private String username;
 
   @Column(name = "password", nullable = false)
+  @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
   private String password;
 
   @OneToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "user_profile_id")
+  @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
   private UserProfile userProfile;
 
   @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
   @JoinColumn(name = "user_role_id", nullable = false)
+  @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
   private UserRole userRole;
 
   @JsonIgnore

@@ -1,6 +1,12 @@
 package com.postit.service;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,9 +42,15 @@ public class PostServiceImpl implements PostService {
     return postList;
   }
 
-@Override
-public List<Comment> getCommentsByPostId(Long postId) {
-	return postDao.getCommentsByPostId(postId);
-}
+  @Override
+  public List<Comment> getCommentsByPostId(Long postId) {
+
+    List<Comment> commentList = postDao.getCommentsByPostId(postId);
+    Set<Comment> commentSet = new HashSet<>(commentList);
+    commentList = new ArrayList<Comment>(commentSet);
+    commentList = commentList.stream().sorted(Comparator.comparing(Comment::getCommentId))
+        .collect(Collectors.toList());
+    return commentList;
+  }
 
 }

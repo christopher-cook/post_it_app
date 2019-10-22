@@ -10,7 +10,7 @@ public interface UserDao {
 
   public User login(User user);
 
-  public String deleteUser(String username);
+  public Long deleteUser(Long userId);
 
   public List<User> listUsers();
 

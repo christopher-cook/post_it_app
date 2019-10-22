@@ -81,10 +81,8 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public String deleteUser(String username) {
-
-    // TODO Auto-generated method stub
-    return null;
+  public Long deleteUser(Long userId) {
+	  return userDao.deleteUser(userId);
   }
 
   @Override

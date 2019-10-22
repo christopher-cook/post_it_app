@@ -63,13 +63,6 @@ public class UserDaoImpl implements UserDao {
   }
 
   @Override
-  public String deleteUser(String username) {
-
-    // TODO Auto-generated method stub
-    return null;
-  }
-
-  @Override
   public List<User> listUsers() {
 
     List<User> allUsers = null;	//init list
@@ -139,5 +132,23 @@ public class UserDaoImpl implements UserDao {
 
     return user;
   }
+
+@Override
+public Long deleteUser(Long userId) {
+	Session session = sessionFactory.getCurrentSession();
+	User user = null;
+	
+	try {
+		session.beginTransaction();
+		
+		user = session.get(User.class, userId);
+		session.delete(user);
+		
+		session.getTransaction().commit();
+	} finally {
+		session.close();
+	}
+	return userId;
+}
 
 }

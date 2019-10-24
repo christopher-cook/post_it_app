@@ -7,26 +7,29 @@ import org.springframework.stereotype.Service;
 
 import com.postit.dao.CommentDao;
 import com.postit.entity.Comment;
+import com.postit.exception.EntityNotFoundException;
 
 @Service
-public class CommentServiceImpl implements CommentService{
+public class CommentServiceImpl implements CommentService {
 
-	@Autowired
-	private CommentDao commentDao;
-	
-	@Override
-	public List<Comment> listComments() {
-		return commentDao.listComments();
-	}
+  @Autowired
+  private CommentDao commentDao;
 
-	@Override
-	public Comment createComment(String username, Comment comment, Long postId) {
-		return commentDao.createComment(username, comment, postId);
-	}
+  @Override
+  public List<Comment> listComments() {
 
-	@Override
-	public Long deleteComment(String username, Long commentId) {
-		return commentDao.deleteComment(username, commentId);
-	}
+    return commentDao.listComments();
+  }
+
+  @Override
+  public Comment createComment(String username, Comment comment, Long postId) {
+    return commentDao.createComment(username, comment, postId);
+  }
+
+  @Override
+  public Long deleteComment(String username, Long commentId) throws EntityNotFoundException {
+
+    return commentDao.deleteComment(username, commentId);
+  }
 
 }

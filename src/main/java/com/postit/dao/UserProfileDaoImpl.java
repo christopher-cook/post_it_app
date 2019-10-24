@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import com.postit.entity.User;
 import com.postit.entity.UserProfile;
+import com.postit.exception.EntityNotFoundException;
 
 @Repository
 public class UserProfileDaoImpl implements UserProfileDao {
@@ -39,10 +40,16 @@ public class UserProfileDaoImpl implements UserProfileDao {
   }
 
   @Override
-  public UserProfile getUserProfile(String username) {
+  public UserProfile getUserProfile(String username) throws EntityNotFoundException {
 
     User user = userDao.getUserByUsername(username);
-    return user.getUserProfile();
+    UserProfile userProfile = user.getUserProfile();
+    if(userProfile == null){
+      throw new EntityNotFoundException("the profile for this user doesn't exist");
+    }
+    userProfile.setUser(user);
+    
+    return userProfile;
   }
 
   @Override

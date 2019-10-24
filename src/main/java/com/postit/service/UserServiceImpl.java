@@ -18,6 +18,10 @@ import com.postit.entity.Comment;
 import com.postit.entity.Post;
 import com.postit.entity.User;
 import com.postit.entity.UserRole;
+import com.postit.exception.EmptyFieldException;
+import com.postit.exception.EntityNotFoundException;
+import com.postit.exception.LoginException;
+import com.postit.exception.SignUpException;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -38,7 +42,7 @@ public class UserServiceImpl implements UserService {
     User user = userDao.getUserByUsername(username);
 
     if (user == null)
-      throw new UsernameNotFoundException("Unkknown user: " + username);
+      throw new UsernameNotFoundException("Unknown user: " + username);
 
     return new org.springframework.security.core.userdetails.User(user.getUsername(),
         bCryptPasswordEncoder.encode(user.getPassword()), true, true, true, true,
@@ -55,22 +59,33 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public String signup(User user) {
+  public String signup(User user) throws SignUpException, EmptyFieldException {
 
     user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-
+    if (userDao.getUserByUsername(user.getUsername()) != null) {
+      throw new SignUpException("duplicate username");
+    }
+    if (userDao.getUserByEmail(user.getEmail()) != null) {
+      throw new SignUpException("duplicate email");
+    }
     if (userDao.signup(user).getUserId() != null) {
       UserDetails userDetails = loadUserByUsername(user.getUsername());
 
       return jwtUtil.generateToken(userDetails);
+    } else {
+      throw new SignUpException("signup failed");
     }
-
-    return null;
   }
 
   @Override
-  public String login(User user) {
+  public String login(User user) throws LoginException, EntityNotFoundException, EmptyFieldException {
 
+    if (user.getEmail() == null || user.getEmail().length() == 0) {
+      throw new EmptyFieldException("empty/missing email");
+    }
+    if (user.getPassword() == null || user.getPassword().length() == 0) {
+      throw new EmptyFieldException("empty/missing password");
+    }
     User foundUser = userDao.login(user);
     if (foundUser != null && foundUser.getUserId() != null
         && bCryptPasswordEncoder.matches(user.getPassword(), foundUser.getPassword())) {
@@ -78,8 +93,8 @@ public class UserServiceImpl implements UserService {
 
       return jwtUtil.generateToken(userDetails);
     }
-
-    return null;
+    System.out.println("username/password invalid");
+    throw new LoginException("username/password invalid");
   }
 
   @Override
@@ -119,11 +134,11 @@ public class UserServiceImpl implements UserService {
     return userDao.getPostsByUser(username);
   }
 
-@Override
-public List<Comment> getCommentsByUser(String username) {
-	
-	return userDao.getCommentsByUser(username);
+  @Override
+  public List<Comment> getCommentsByUser(String username) {
 
-}
+    return userDao.getCommentsByUser(username);
+
+  }
 
 }

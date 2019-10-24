@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.postit.entity.User;
+import com.postit.exception.EntityNotFoundException;
 import com.postit.entity.Comment;
 import com.postit.entity.Post;
 
@@ -39,7 +40,7 @@ public class PostDaoImpl implements PostDao {
   }
 
   @Override
-  public Long deletePostByPostId(String username, Long postId) {
+  public Long deletePostByPostId(String username, Long postId) throws EntityNotFoundException {
 
     User user = userDao.getUserByUsername(username);
 
@@ -51,8 +52,13 @@ public class PostDaoImpl implements PostDao {
       Post post = session.get(Post.class, postId);
       
       if (post.getUser().getUsername().equals(user.getUsername())) {
+        // solve deleted object would be re-saved by cascade (remove deleted object from associations)
+        post.getUser().getPostList().remove(post);
+        post.setUser(null);
+        //end
         session.delete(post);
         session.getTransaction().commit();
+<<<<<<< HEAD
         
         return postId;
         
@@ -60,8 +66,20 @@ public class PostDaoImpl implements PostDao {
         return 0L;
       }
     } finally {
+=======
+      }else{
+        throw new EntityNotFoundException("post entity not found");
+      }
+    } catch(EntityNotFoundException | NullPointerException e){
+      throw new EntityNotFoundException("post entity not found / not owned by this user");
+    }catch(Exception e){
+      System.out.println(e);
+      throw e;
+    }finally {
+>>>>>>> f6736d314c9ce0eed5ad1a8c16219658458a32a1
       session.close();
     }
+    return postId;
   }
 
   @SuppressWarnings("unchecked")
@@ -72,8 +90,8 @@ public class PostDaoImpl implements PostDao {
 
     Session session = sessionFactory.getCurrentSession();
     try {
-       session.beginTransaction();
-       postList = session.createQuery("From Post").getResultList();
+      session.beginTransaction();
+      postList = session.createQuery("From Post").getResultList();
     } finally {
       session.close();
     }
@@ -81,18 +99,24 @@ public class PostDaoImpl implements PostDao {
     return postList;
   }
 
-	@Override
-	public List<Comment> getCommentsByPostId(Long postId) {
-		List<Comment> commentList = null;
-		
-		Session session = sessionFactory.getCurrentSession();
-		try {
-			session.beginTransaction();
-			Post post = session.get(Post.class,  postId);
-			commentList = post.getCommentList();
-		} finally {
-			session.close();
-		}
-		return commentList;
-	}
+  @Override
+  public List<Comment> getCommentsByPostId(Long postId) throws EntityNotFoundException {
+
+    List<Comment> commentList = null;
+
+    Session session = sessionFactory.getCurrentSession();
+    try {
+      session.beginTransaction();
+      Post post = session.get(Post.class, postId);
+      if(post == null){
+        throw new EntityNotFoundException("post entity doesn't exist");
+      }
+      commentList = post.getCommentList();
+    } catch(EntityNotFoundException e){
+      throw new EntityNotFoundException("post entity doesn't exist");
+    }finally {
+      session.close();
+    }
+    return commentList;
+  }
 }

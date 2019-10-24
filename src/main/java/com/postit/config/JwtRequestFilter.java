@@ -6,6 +6,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import com.postit.config.JwtUtil;
+import com.postit.exception.JwtException;
 import com.postit.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -33,7 +34,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
     String username = null;
     String jwtToken = null;
-    System.out.println(requestTokenHeader);
+    System.out.println("header authorization: " + requestTokenHeader);
     if (requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ")) {
       jwtToken = requestTokenHeader.substring(7);
 

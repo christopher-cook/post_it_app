@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.postit.entity.UserProfile;
+import com.postit.exception.EmptyFieldException;
+import com.postit.exception.EntityNotFoundException;
 import com.postit.service.UserProfileService;
 
 @RestController
@@ -20,11 +22,7 @@ public class UserProfileController {
 
   @PostMapping("")
   public UserProfile createOrUpdateProfile(Authentication auth,
-      @RequestBody UserProfile userProfile) {
-
-    if (auth == null) {
-      return new UserProfile();
-    }
+      @RequestBody UserProfile userProfile) throws EmptyFieldException, EntityNotFoundException {
     String username = auth.getName();
     UserProfile checkedProfile = userProfileService.getUserProfile(username);
     if (checkedProfile == null) {
@@ -38,11 +36,8 @@ public class UserProfileController {
   }
 
   @GetMapping("")
-  public UserProfile createOrUpdateProfile(Authentication auth) {
+  public UserProfile getProfile(Authentication auth) throws EntityNotFoundException {
 
-    if (auth == null) {
-      return new UserProfile();
-    }
     String username = auth.getName();
     return userProfileService.getUserProfile(username);
   }

@@ -28,29 +28,42 @@ import com.postit.utils.SecurityUtils;
 @RequestMapping("/post")
 public class PostController {
 
-  @Autowired
   private PostService postService;
+
+  @Autowired
+  public void setPostService(PostService postService) {
+
+    this.postService = postService;
+  }
+
+  @Autowired
+  private SecurityUtils securityUtils;
 
   @PostMapping("")
   public Post createPost(@Valid @RequestBody Post post) {
-    String username = SecurityUtils.getAuthenticatedUsername();
+
+    String username = securityUtils.getAuthenticatedUsername();
     return postService.createPost(username, post);
   }
 
   @DeleteMapping("/{postId}")
-  public Long deletePost(@PathVariable Long postId) throws EntityNotFoundException{
-    String username = SecurityUtils.getAuthenticatedUsername();
+  public Long deletePost(@PathVariable Long postId) throws EntityNotFoundException {
+
+    String username = securityUtils.getAuthenticatedUsername();
     return postService.deletePostByPostId(username, postId);
   }
-  
+
   @GetMapping("/list")
   public List<Post> listPosts() {
+
     return postService.listPosts();
   }
-  
+
   @GetMapping("/{postId}/comment")
-  public List<Comment> getCommentsByPostId(@PathVariable Long postId) throws EntityNotFoundException {
-	return postService.getCommentsByPostId(postId);
+  public List<Comment> getCommentsByPostId(@PathVariable Long postId)
+      throws EntityNotFoundException {
+
+    return postService.getCommentsByPostId(postId);
   }
-  
+
 }

@@ -16,6 +16,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -33,10 +35,12 @@ public class User {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long userId;
 
+  @Email(message = "Email invalid")
   @Column(name = "email", unique = true, nullable = false)
   @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
   private String email;
 
+  @NotBlank(message = "Username cannot be blank") // javax
   @Column(name = "username", unique = true, nullable = false)
   private String username;
 
@@ -55,11 +59,11 @@ public class User {
   private UserRole userRole;
 
   @JsonIgnore
-  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL,  fetch = FetchType.EAGER)
+  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
   private List<Post> postList;
 
   @JsonIgnore
-  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)//
+  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER) //
   private List<Comment> commentList;
 
   public Long getUserId() {

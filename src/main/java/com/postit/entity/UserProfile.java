@@ -14,6 +14,9 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.Email;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
 @Table(name = "profiles")
@@ -24,6 +27,7 @@ public class UserProfile {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long profileId;
 
+//  @Email(message = "Email invalid")
   @Column(name = "email")
   private String additionalEmail;
 
@@ -32,6 +36,22 @@ public class UserProfile {
 
   @Column(name = "address")
   private String address;
+
+  @OneToOne(cascade = {CascadeType.DETACH, CascadeType.REFRESH})
+  @JoinColumn(name = "profile_user_id")
+  private User user;
+
+  
+  public User getUser() {
+  
+    return user;
+  }
+
+  
+  public void setUser(User user) {
+  
+    this.user = user;
+  }
 
   public Long getProfileId() {
 

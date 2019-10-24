@@ -9,6 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -21,10 +22,11 @@ public class Comment {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long commentId;
   
+  @NotBlank
   @Column(name = "text")
   private String text;
   
-  @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+//  @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
   @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
   @JoinColumn(name = "comment_user_id", nullable=false)
   private User user;

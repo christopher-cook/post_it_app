@@ -7,12 +7,16 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import com.postit.entity.Comment;
 import com.postit.entity.Post;
 import com.postit.entity.User;
+import com.postit.exception.EmptyFieldException;
+import com.postit.exception.EntityNotFoundException;
+import com.postit.exception.LoginException;
+import com.postit.exception.SignUpException;
 
 public interface UserService extends UserDetailsService {
 
-  public String signup(User user);
+  public String signup(User user) throws SignUpException, EmptyFieldException;
 
-  public String login(User user);
+  public String login(User user) throws LoginException, EntityNotFoundException, EmptyFieldException;
 
   public Long deleteUser(Long userId);
 

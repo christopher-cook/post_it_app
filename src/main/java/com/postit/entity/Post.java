@@ -13,6 +13,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -25,17 +26,20 @@ public class Post {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long postId;
   
+  @NotBlank
   @Column(name = "title")
   private String title;
   
+  @NotBlank
   @Column(name = "description")
   private String description;
   
-  @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+//  @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
   @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
   @JoinColumn(name = "post_user_id")
   private User user;
   
+  @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
   @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
   private List<Comment> commentList;
 

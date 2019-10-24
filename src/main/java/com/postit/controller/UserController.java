@@ -2,9 +2,12 @@ package com.postit.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,6 +20,10 @@ import com.postit.entity.Comment;
 import com.postit.entity.JwtResponse;
 import com.postit.entity.Post;
 import com.postit.entity.User;
+import com.postit.exception.EmptyFieldException;
+import com.postit.exception.EntityNotFoundException;
+import com.postit.exception.LoginException;
+import com.postit.exception.SignUpException;
 import com.postit.service.UserService;
 
 @RestController
@@ -27,30 +34,17 @@ public class UserController {
   private UserService userService;
 
   @PostMapping("/signup")
-  public ResponseEntity<?> signup(@RequestBody User user) {
-
-    if (user.getEmail() == null || user.getUsername() == null || user.getPassword() == null) {
-      return ResponseEntity.badRequest().body("invalid arguments");
-    }
-    User nameSearch = userService.getUserByUsername(user.getUsername());
-    if (nameSearch != null) {
-      return ResponseEntity.badRequest().body("username already exists");
-    }
-    User emailSearch = userService.getUserByEmail(user.getEmail());
-    if (emailSearch != null) {
-      return ResponseEntity.badRequest().body("email already exists");
-    }
+  public ResponseEntity<?> signup(@Valid @RequestBody User user) throws SignUpException, EmptyFieldException {
     return ResponseEntity.ok(new JwtResponse(userService.signup(user), user.getUsername()));
   }
 
   @PostMapping("/login")
-  public ResponseEntity<?> login(@RequestBody User user) {
+  public ResponseEntity<?> login(@RequestBody User user) throws LoginException, EntityNotFoundException, EmptyFieldException {
 
     String token = userService.login(user);
-    if (token == null) {
-      return ResponseEntity.badRequest().body("username/password invalid");
-    }
-    return ResponseEntity.ok(new JwtResponse(token, user.getUsername()));
+    String username = userService.getUserByEmail(user.getEmail()).getUsername();
+    System.out.println("token is: " + token);
+    return ResponseEntity.ok(new JwtResponse(token, username));
   }
 
   @GetMapping("/list")
@@ -73,20 +67,12 @@ public class UserController {
 
   @GetMapping("/post")
   public List<Post> getPostsByUser(Authentication auth) {
-
-    if (auth == null) {
-      return null;
-    }
     String username = auth.getName();
     return userService.getPostsByUser(username);
   }
   
   @GetMapping("/comment")
   public List<Comment> getCommentsByUser(Authentication auth) {
-	  
-	  if(auth == null) {
-		  return null;
-	  }
 	  String username = auth.getName();
 	  return userService.getCommentsByUser(username);
   }

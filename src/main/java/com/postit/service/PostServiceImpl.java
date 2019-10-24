@@ -15,6 +15,8 @@ import com.postit.dao.PostDao;
 import com.postit.entity.Comment;
 import com.postit.entity.Post;
 import com.postit.entity.User;
+import com.postit.exception.EmptyFieldException;
+import com.postit.exception.EntityNotFoundException;
 
 @Service
 public class PostServiceImpl implements PostService {
@@ -30,7 +32,7 @@ public class PostServiceImpl implements PostService {
   }
 
   @Override
-  public Long deletePostByPostId(String username, Long postId) {
+  public Long deletePostByPostId(String username, Long postId) throws EntityNotFoundException {
 
     return postDao.deletePostByPostId(username, postId);
   }
@@ -43,7 +45,7 @@ public class PostServiceImpl implements PostService {
   }
 
   @Override
-  public List<Comment> getCommentsByPostId(Long postId) {
+  public List<Comment> getCommentsByPostId(Long postId) throws EntityNotFoundException {
 
     List<Comment> commentList = postDao.getCommentsByPostId(postId);
     Set<Comment> commentSet = new HashSet<>(commentList);

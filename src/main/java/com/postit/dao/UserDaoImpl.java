@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.postit.entity.UserRole;
+import com.postit.exception.EntityNotFoundException;
+import com.postit.exception.SignUpException;
 import com.postit.entity.Comment;
 import com.postit.entity.Post;
 import com.postit.entity.User;
@@ -22,7 +24,7 @@ public class UserDaoImpl implements UserDao {
   private UserRoleDao userRoleDao;
 
   @Override
-  public User signup(User user) {
+  public User signup(User user) throws SignUpException {
 
     String roleName = "ROLE_USER";
     UserRole userRole = userRoleDao.getRole(roleName);
@@ -36,8 +38,9 @@ public class UserDaoImpl implements UserDao {
       session.save(user);
 
       session.getTransaction().commit();
-    } catch (Exception e) {
-      System.out.println("signup bad request");
+    }
+    catch (Exception e) {
+      throw new SignUpException(e.getMessage());
     } finally {
       session.close();
     }
@@ -46,7 +49,7 @@ public class UserDaoImpl implements UserDao {
   }
 
   @Override
-  public User login(User user) {
+  public User login(User user) throws EntityNotFoundException {
 
     User savedUser = null;
 
@@ -54,9 +57,10 @@ public class UserDaoImpl implements UserDao {
     try {
       session.beginTransaction();
 
-      savedUser =
-          (User) session.createQuery("FROM User u WHERE u.username = '" + user.getUsername() + "'")
-              .getSingleResult();
+      savedUser = (User) session
+          .createQuery("FROM User u WHERE u.email = '" + user.getEmail() + "'").getSingleResult();
+    } catch (Exception e) {
+      throw new EntityNotFoundException("login error: entity not found");
     } finally {
       session.close();
     }
@@ -171,21 +175,22 @@ public class UserDaoImpl implements UserDao {
     return postList;
   }
 
-@Override
-public List<Comment> getCommentsByUser(String username) {
-	List<Comment> commentList = null;
-	
-	Session session = sessionFactory.getCurrentSession();
-	try {
-		session.beginTransaction();
-		User user = (User) session.createQuery("FROM User u WHERE u.username = '" + username + "'")
-				.uniqueResult();
-		commentList = user.getCommentList();
-		
-	} finally {
-		session.close();
-	}
-	return commentList;
-}
+  @Override
+  public List<Comment> getCommentsByUser(String username) {
+
+    List<Comment> commentList = null;
+
+    Session session = sessionFactory.getCurrentSession();
+    try {
+      session.beginTransaction();
+      User user = (User) session.createQuery("FROM User u WHERE u.username = '" + username + "'")
+          .uniqueResult();
+      commentList = user.getCommentList();
+
+    } finally {
+      session.close();
+    }
+    return commentList;
+  }
 
 }

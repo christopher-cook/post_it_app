@@ -5,12 +5,14 @@ import java.util.List;
 import com.postit.entity.Comment;
 import com.postit.entity.Post;
 import com.postit.entity.User;
+import com.postit.exception.EntityNotFoundException;
+import com.postit.exception.SignUpException;
 
 public interface UserDao {
 
-  public User signup(User user);
+  public User signup(User user) throws SignUpException;
 
-  public User login(User user);
+  public User login(User user) throws EntityNotFoundException;
 
   public Long deleteUser(Long userId);
 

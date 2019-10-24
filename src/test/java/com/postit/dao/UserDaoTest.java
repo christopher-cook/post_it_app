@@ -124,14 +124,30 @@ public class UserDaoTest {
 		User tempUser = userDao.getUserByUserId(user.getUserId());
 		assertEquals(new Long(1), tempUser.getUserId());
 	}
-	
+//	
 //	@Test
 //	public void getPost_ByUser_Success() {
 //		when(session.createQuery(anyString())).thenReturn(query);
 //		when(query.uniqueResult()).thenReturn(user);
 //		
 //		List<Post> tempUser = userDao.getPostsByUser(user.getUsername());
-//		assertEquals(postList, tempUser;
+//		assertArrayEquals(postList, tempUser);
 //	}
-//	
+	
+	@Test
+	public void listAll_Users_Success() {
+		
+	}
+	
+	@Test
+	public void deleteUser_ById_Success() {
+		
+	}
+	
+	@Test
+	public void getComment_ByUser_Success() {
+		
+	}
+	
+	
 }

@@ -46,11 +46,8 @@ public class PostDaoImpl implements PostDao {
 
     Session session = sessionFactory.getCurrentSession();
     try {
-    	
       session.beginTransaction();
-      
       Post post = session.get(Post.class, postId);
-      
       if (post.getUser().getUsername().equals(user.getUsername())) {
         // solve deleted object would be re-saved by cascade (remove deleted object from associations)
         post.getUser().getPostList().remove(post);
@@ -58,15 +55,6 @@ public class PostDaoImpl implements PostDao {
         //end
         session.delete(post);
         session.getTransaction().commit();
-<<<<<<< HEAD
-        
-        return postId;
-        
-      } else {
-        return 0L;
-      }
-    } finally {
-=======
       }else{
         throw new EntityNotFoundException("post entity not found");
       }
@@ -76,7 +64,6 @@ public class PostDaoImpl implements PostDao {
       System.out.println(e);
       throw e;
     }finally {
->>>>>>> f6736d314c9ce0eed5ad1a8c16219658458a32a1
       session.close();
     }
     return postId;

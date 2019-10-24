@@ -34,22 +34,7 @@ public class UserController {
   private UserService userService;
 
   @PostMapping("/signup")
-<<<<<<< HEAD
-  public ResponseEntity<?> signup(@RequestBody User user) {
-    if (user.getEmail() == null || user.getUsername() == null || user.getPassword() == null) {
-      return ResponseEntity.badRequest().body("invalid arguments");
-    }
-    User nameSearch = userService.getUserByUsername(user.getUsername());
-    if (nameSearch != null) {
-      return ResponseEntity.badRequest().body("username already exists");
-    }
-    User emailSearch = userService.getUserByEmail(user.getEmail());
-    if (emailSearch != null) {
-      return ResponseEntity.badRequest().body("email already exists");
-    }
-=======
   public ResponseEntity<?> signup(@Valid @RequestBody User user) throws SignUpException, EmptyFieldException {
->>>>>>> f6736d314c9ce0eed5ad1a8c16219658458a32a1
     return ResponseEntity.ok(new JwtResponse(userService.signup(user), user.getUsername()));
   }
 

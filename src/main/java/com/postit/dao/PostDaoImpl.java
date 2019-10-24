@@ -45,16 +45,20 @@ public class PostDaoImpl implements PostDao {
 
     Session session = sessionFactory.getCurrentSession();
     try {
+    	
       session.beginTransaction();
+      
       Post post = session.get(Post.class, postId);
+      
       if (post.getUser().getUsername().equals(user.getUsername())) {
         session.delete(post);
         session.getTransaction().commit();
+        
         return postId;
+        
       } else {
         return 0L;
       }
-
     } finally {
       session.close();
     }

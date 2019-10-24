@@ -28,7 +28,6 @@ public class UserController {
 
   @PostMapping("/signup")
   public ResponseEntity<?> signup(@RequestBody User user) {
-
     if (user.getEmail() == null || user.getUsername() == null || user.getPassword() == null) {
       return ResponseEntity.badRequest().body("invalid arguments");
     }

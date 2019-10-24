@@ -4,9 +4,12 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,11 +28,12 @@ import com.postit.exception.EntityNotFoundException;
 import com.postit.exception.LoginException;
 import com.postit.exception.SignUpException;
 import com.postit.service.UserService;
+import com.postit.utils.SecurityUtils;
 
 @RestController
 @RequestMapping("/user")
 public class UserController {
-
+  
   @Autowired
   private UserService userService;
 
@@ -66,14 +70,14 @@ public class UserController {
   }
 
   @GetMapping("/post")
-  public List<Post> getPostsByUser(Authentication auth) {
-    String username = auth.getName();
+  public List<Post> getPostsByUser() {
+    String username = SecurityUtils.getAuthenticatedUsername();
     return userService.getPostsByUser(username);
   }
   
   @GetMapping("/comment")
-  public List<Comment> getCommentsByUser(Authentication auth) {
-	  String username = auth.getName();
+  public List<Comment> getCommentsByUser() {
+	  String username = SecurityUtils.getAuthenticatedUsername();
 	  return userService.getCommentsByUser(username);
   }
 }

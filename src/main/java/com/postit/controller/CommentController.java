@@ -17,6 +17,7 @@ import com.postit.entity.Comment;
 import com.postit.exception.EntityNotFoundException;
 import com.postit.service.CommentService;
 import com.postit.service.UserService;
+import com.postit.utils.SecurityUtils;
 
 @RestController
 @RequestMapping("/comment")
@@ -26,18 +27,16 @@ public class CommentController {
   private CommentService commentService;
 
   @PostMapping("/{postId}")
-  public Comment createComment(Authentication auth, @Valid @RequestBody Comment comment,
+  public Comment createComment(@Valid @RequestBody Comment comment,
       @PathVariable Long postId) {
-
-    String username = auth.getName();
+    String username = SecurityUtils.getAuthenticatedUsername();
     return commentService.createComment(username, comment, postId);
   }
 
   @DeleteMapping("/{commentId}")
-  public Long deleteComment(Authentication auth, @PathVariable Long commentId)
+  public Long deleteComment(@PathVariable Long commentId)
       throws EntityNotFoundException {
-
-    String username = auth.getName();
+    String username = SecurityUtils.getAuthenticatedUsername();
     System.out.println(username);
     return commentService.deleteComment(username, commentId);
   }

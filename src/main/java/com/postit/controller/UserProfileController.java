@@ -12,18 +12,25 @@ import com.postit.entity.UserProfile;
 import com.postit.exception.EmptyFieldException;
 import com.postit.exception.EntityNotFoundException;
 import com.postit.service.UserProfileService;
+import com.postit.utils.SecurityUtils;
 
 @RestController
 @RequestMapping("/profile")
 public class UserProfileController {
 
-  @Autowired
   private UserProfileService userProfileService;
 
+  @Autowired
+  public void setUserProfileService(UserProfileService userProfileService) {
+
+    this.userProfileService = userProfileService;
+  }
+
   @PostMapping("")
-  public UserProfile createOrUpdateProfile(Authentication auth,
-      @RequestBody UserProfile userProfile) throws EmptyFieldException, EntityNotFoundException {
-    String username = auth.getName();
+  public UserProfile createOrUpdateProfile(@RequestBody UserProfile userProfile)
+      throws EmptyFieldException, EntityNotFoundException {
+
+    String username = SecurityUtils.getAuthenticatedUsername();
     UserProfile checkedProfile = userProfileService.getUserProfile(username);
     if (checkedProfile == null) {
       System.out.println("creating profile");
@@ -36,9 +43,9 @@ public class UserProfileController {
   }
 
   @GetMapping("")
-  public UserProfile getProfile(Authentication auth) throws EntityNotFoundException {
+  public UserProfile getProfile() throws EntityNotFoundException {
 
-    String username = auth.getName();
+    String username = SecurityUtils.getAuthenticatedUsername();
     return userProfileService.getUserProfile(username);
   }
 }

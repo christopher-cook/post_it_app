@@ -22,6 +22,7 @@ import com.postit.entity.Post;
 import com.postit.exception.EmptyFieldException;
 import com.postit.exception.EntityNotFoundException;
 import com.postit.service.PostService;
+import com.postit.utils.SecurityUtils;
 
 @RestController
 @RequestMapping("/post")
@@ -31,14 +32,14 @@ public class PostController {
   private PostService postService;
 
   @PostMapping("")
-  public Post createPost(Authentication auth,@Valid @RequestBody Post post) {
-    String username = auth.getName();
+  public Post createPost(@Valid @RequestBody Post post) {
+    String username = SecurityUtils.getAuthenticatedUsername();
     return postService.createPost(username, post);
   }
 
   @DeleteMapping("/{postId}")
-  public Long deletePost(Authentication auth, @PathVariable Long postId) throws EntityNotFoundException{
-    String username = auth.getName();
+  public Long deletePost(@PathVariable Long postId) throws EntityNotFoundException{
+    String username = SecurityUtils.getAuthenticatedUsername();
     return postService.deletePostByPostId(username, postId);
   }
   

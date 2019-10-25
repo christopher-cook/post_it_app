@@ -5,6 +5,10 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.hibernate.Session;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,41 +22,49 @@ import com.postit.config.JwtUtil;
 import com.postit.dao.UserDao;
 import com.postit.entity.User;
 import com.postit.entity.UserRole;
+import com.postit.exception.EmptyFieldException;
+import com.postit.exception.EntityNotFoundException;
+import com.postit.exception.LoginException;
+import com.postit.exception.SignUpException;
 
 @RunWith(MockitoJUnitRunner.class)
 public class UserServiceTest {
 
+	
 	private MockMvc mockMvc;
-
+	
 	@InjectMocks
 	UserServiceImpl userService;
-
+	
 	@Mock
 	UserDao userDao;
-
+	
 	@Mock
 	JwtUtil jwtUtil;
-
+	
 	@Mock
     private PasswordEncoder bCryptPasswordEncoder;
-
+	
 	@InjectMocks
 	private User user;
-
-
+	
+	@Mock
+	private Session session;
+	
 	@Before
 	public void initMockBuild() {
-		UserRole userRole = new UserRole();
-
+			UserRole userRole = new UserRole();
+		
 		 	userRole.setName("ROLE_ADMIN");
 	        user.setUserId(1L);
+	        user.setEmail("testEmail@email.com");
 	        user.setUsername("testUser");
 	        user.setPassword("testPass");
 	        user.setUserRole(userRole);
 	}
 
 	@Test
-	public void signup_ReturnToken_Success() {
+	public void signup_ReturnToken_Success() throws SignUpException, EmptyFieldException {
 		String expectedToken = "returnToken";
 
 		 when(userDao.signup(any())).thenReturn(user);
@@ -66,7 +78,7 @@ public class UserServiceTest {
 	}
 
 	@Test
-	public void login_ReturnToken_Success() {
+	public void login_ReturnToken_Success() throws EntityNotFoundException, LoginException, EmptyFieldException {
 		String expectedToken = "returnToken";
 
 		when(userDao.login(any())).thenReturn(user);
@@ -148,19 +160,5 @@ public class UserServiceTest {
 
 		assertEquals(actualUser, user);
 	}
-
-	@Test(expected = SignUpException.class)
-	public void signup_Null_Throw() throws SignUpException, EmptyFieldException {
-	String expectedToken = "returnToken";
-
-//		 when(userDao.signup(any())).thenReturn(user);
-		 when(userDao.getUserByUsername(anyString())).thenReturn(user);
-//	     when(jwtUtil.generateToken(any())).thenReturn(expectedToken);
-		 when(bCryptPasswordEncoder.encode(user.getPassword())).thenReturn("testPass");
-
-		 String actualToken = userService.signup(user);
-
-		 assertEquals(actualToken, expectedToken);
-}
 
 }

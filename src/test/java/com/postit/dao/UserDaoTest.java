@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.when;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.anyString;
@@ -27,6 +28,8 @@ import com.postit.entity.Comment;
 import com.postit.entity.Post;
 import com.postit.entity.User;
 import com.postit.entity.UserRole;
+import com.postit.exception.EntityNotFoundException;
+import com.postit.exception.SignUpException;
 
 @RunWith(MockitoJUnitRunner.class)
 public class UserDaoTest {
@@ -60,6 +63,8 @@ public class UserDaoTest {
 
 	@Mock
 	private List<Post> postList;
+	
+	private List<Comment> commentList;
 
 
 	@Before
@@ -70,6 +75,9 @@ public class UserDaoTest {
 
 	@Before
 	public void initTestUser() {
+		postList = new ArrayList<Post>();
+		commentList = new ArrayList<Comment>();
+		
 		userRole.setRoleId(1);
         userRole.setName("ROLE_ADMIN");
         user.setUserId(1L);
@@ -80,7 +88,7 @@ public class UserDaoTest {
 	}
 
 	@Test
-	public void signup_User_Success() {
+	public void signup_User_Success() throws SignUpException {
 		when(userRoleDao.getRole(anyString())).thenReturn(userRole);
 
 		User tempUser = userDao.signup(user);
@@ -88,7 +96,7 @@ public class UserDaoTest {
 	}
 
 	@Test
-	public void login_User_Success() {
+	public void login_User_Success() throws EntityNotFoundException {
 		when(session.createQuery(anyString())).thenReturn(query);
 		when(query.getSingleResult()).thenReturn(user);
 

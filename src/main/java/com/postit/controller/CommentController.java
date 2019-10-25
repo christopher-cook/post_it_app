@@ -25,18 +25,21 @@ public class CommentController {
 
   @Autowired
   private CommentService commentService;
+  
+  @Autowired
+  private SecurityUtils securityUtils;
 
   @PostMapping("/{postId}")
   public Comment createComment(@Valid @RequestBody Comment comment,
       @PathVariable Long postId) {
-    String username = SecurityUtils.getAuthenticatedUsername();
+    String username = securityUtils.getAuthenticatedUsername();
     return commentService.createComment(username, comment, postId);
   }
 
   @DeleteMapping("/{commentId}")
   public Long deleteComment(@PathVariable Long commentId)
       throws EntityNotFoundException {
-    String username = SecurityUtils.getAuthenticatedUsername();
+    String username = securityUtils.getAuthenticatedUsername();
     System.out.println(username);
     return commentService.deleteComment(username, commentId);
   }

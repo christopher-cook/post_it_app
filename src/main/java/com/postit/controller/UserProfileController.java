@@ -19,6 +19,9 @@ import com.postit.utils.SecurityUtils;
 public class UserProfileController {
 
   private UserProfileService userProfileService;
+  
+  @Autowired
+  private SecurityUtils securityUtils;
 
   @Autowired
   public void setUserProfileService(UserProfileService userProfileService) {
@@ -30,7 +33,7 @@ public class UserProfileController {
   public UserProfile createOrUpdateProfile(@RequestBody UserProfile userProfile)
       throws EmptyFieldException, EntityNotFoundException {
 
-    String username = SecurityUtils.getAuthenticatedUsername();
+    String username = securityUtils.getAuthenticatedUsername();
     UserProfile checkedProfile = userProfileService.getUserProfile(username);
     if (checkedProfile == null) {
       System.out.println("creating profile");
@@ -45,7 +48,7 @@ public class UserProfileController {
   @GetMapping("")
   public UserProfile getProfile() throws EntityNotFoundException {
 
-    String username = SecurityUtils.getAuthenticatedUsername();
+    String username = securityUtils.getAuthenticatedUsername();
     return userProfileService.getUserProfile(username);
   }
 }

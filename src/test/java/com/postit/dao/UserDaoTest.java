@@ -30,44 +30,44 @@ import com.postit.entity.UserRole;
 
 @RunWith(MockitoJUnitRunner.class)
 public class UserDaoTest {
-	
+
 	private MockMvc mockMvc;
-	
+
 	@InjectMocks
 	private User user;
-	
-	
+
+
 	@InjectMocks
 	private UserRole userRole;
-	
+
 	@Mock
 	private UserRoleDao userRoleDao;
-	
+
 	@InjectMocks
     private UserDaoImpl userDao;
-	
+
 	@Mock
 	private SessionFactory sessionFactory;
-	
+
 	@Mock
 	private Session session;
-	
+
 	@Mock
 	private Transaction transaction;
-	
+
 	@Mock
 	private Query<User> query;
-	
+
 	@Mock
 	private List<Post> postList;
 
-	
+
 	@Before
 	public void initSession() {
 	   when(sessionFactory.getCurrentSession()).thenReturn(session);
 	   when(session.getTransaction()).thenReturn(transaction);
 	}
-	
+
 	@Before
 	public void initTestUser() {
 		userRole.setRoleId(1);
@@ -78,76 +78,86 @@ public class UserDaoTest {
         user.setPassword("testPass");
         user.setUserRole(userRole);
 	}
-	
+
 	@Test
 	public void signup_User_Success() {
 		when(userRoleDao.getRole(anyString())).thenReturn(userRole);
-		
+
 		User tempUser = userDao.signup(user);
         assertEquals(tempUser.getUsername(), user.getUsername());
 	}
-	
+
 	@Test
 	public void login_User_Success() {
 		when(session.createQuery(anyString())).thenReturn(query);
 		when(query.getSingleResult()).thenReturn(user);
-		
+
 		User savedUser = userDao.login(user);
-		assertEquals(savedUser, user);	
+		assertEquals(savedUser, user);
 	}
-	
+
 	@Test
 	public void getUser_ByUsername_Success() {
-		
+
 		when(session.createQuery(anyString())).thenReturn(query);
 		when(query.uniqueResult()).thenReturn(user);
-		 
+
 		User tempUser = userDao.getUserByUsername(user.getUsername());
 		 assertEquals("chris", tempUser.getUsername());
 	}
-	
+
 	@Test
 	public void getUser_ByEmail_Success() {
-		
+
 		when(session.createQuery(anyString())).thenReturn(query);
 		when(query.uniqueResult()).thenReturn(user);
-		
+
 		User tempUser = userDao.getUserByEmail(user.getEmail());
 		assertEquals("testEmail", tempUser.getEmail());
 	}
-	
+
 	@Test
 	public void getUser_ById_Success() {
 		when(session.createQuery(anyString())).thenReturn(query);
 		when(query.uniqueResult()).thenReturn(user);
-		
+
 		User tempUser = userDao.getUserByUserId(user.getUserId());
 		assertEquals(new Long(1), tempUser.getUserId());
 	}
-//	
-//	@Test
-//	public void getPost_ByUser_Success() {
-//		when(session.createQuery(anyString())).thenReturn(query);
-//		when(query.uniqueResult()).thenReturn(user);
-//		
-//		List<Post> tempUser = userDao.getPostsByUser(user.getUsername());
-//		assertArrayEquals(postList, tempUser);
-//	}
-	
+
+	@Test
+	public void getPost_ByUser_Success() {
+		postList.add(new Post());
+
+		user.setPostList(postList);
+		when(session.createQuery(anyString())).thenReturn(query);
+		when(query.uniqueResult()).thenReturn(user);
+
+		List<Post> actualPosts = userDao.getPostsByUser("user1");
+		assertEquals(1, actualPosts.size());
+	}
+
 	@Test
 	public void listAll_Users_Success() {
-		
+
 	}
-	
+
 	@Test
 	public void deleteUser_ById_Success() {
-		
+
 	}
-	
+
 	@Test
-	public void getComment_ByUser_Success() {
-		
+	public void getComment_ByUsername_Success() {
+		commentList.add(new Comment());
+
+		user.setCommentList(commentList);	//set the list to user
+		when(session.createQuery(anyString())).thenReturn(query);
+		when(query.uniqueResult()).thenReturn(user);
+
+		List<Comment> actualComment = userDao.getCommentsByUser("user1");
+		assertEquals(1, actualComment.size());
 	}
-	
-	
+
+
 }

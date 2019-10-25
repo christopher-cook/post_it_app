@@ -4,7 +4,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
-//import org.mockito.Mockito;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -33,13 +33,13 @@ import com.postit.utils.SecurityUtils;
 @RestController
 @RequestMapping("/user")
 public class UserController {
-	
-  @Autowired
-   private SecurityUtils securityUtils;
   
   @Autowired
   private UserService userService;
 
+  @Autowired
+  private SecurityUtils securityUtils;
+  
   @PostMapping("/signup")
   public ResponseEntity<?> signup(@Valid @RequestBody User user) throws SignUpException, EmptyFieldException {
     return ResponseEntity.ok(new JwtResponse(userService.signup(user), user.getUsername()));

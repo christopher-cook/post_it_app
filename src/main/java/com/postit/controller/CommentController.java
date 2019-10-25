@@ -25,10 +25,10 @@ public class CommentController {
 
   @Autowired
   private CommentService commentService;
-  
+
   @Autowired
   private SecurityUtils securityUtils;
-
+  
   @PostMapping("/{postId}")
   public Comment createComment(@Valid @RequestBody Comment comment,
       @PathVariable Long postId) {

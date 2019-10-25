@@ -19,15 +19,15 @@ import com.postit.utils.SecurityUtils;
 public class UserProfileController {
 
   private UserProfileService userProfileService;
-  
-  @Autowired
-  private SecurityUtils securityUtils;
 
   @Autowired
   public void setUserProfileService(UserProfileService userProfileService) {
 
     this.userProfileService = userProfileService;
   }
+
+  @Autowired
+  private SecurityUtils securityUtils;
 
   @PostMapping("")
   public UserProfile createOrUpdateProfile(@RequestBody UserProfile userProfile)

@@ -24,10 +24,10 @@ public class UserProfileServiceImpl implements UserProfileService {
         || userProfile.getAdditionalEmail().length() == 0) {
       throw new EmptyFieldException("empty/missing email");
     }
-    if (userProfile.getMobile() == null || userProfile.getMobile().length() == 0) {
+    else if (userProfile.getMobile() == null || userProfile.getMobile().length() == 0) {
       throw new EmptyFieldException("empty/missing mobile");
     }
-    if (userProfile.getAddress() == null || userProfile.getAddress().length() == 0) {
+    else if (userProfile.getAddress() == null || userProfile.getAddress().length() == 0) {
       throw new EmptyFieldException("empty/missing address");
     }
     return userProfileDao.createProfile(username, userProfile);

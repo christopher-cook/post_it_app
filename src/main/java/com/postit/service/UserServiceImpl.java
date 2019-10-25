@@ -62,7 +62,7 @@ public class UserServiceImpl implements UserService {
   public String signup(User user) throws SignUpException, EmptyFieldException {
 
     user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-    if (userDao.getUserByUsername(user.getUsername()) != null) {
+    if (userDao.getUserByUsername(user.getUsername()) != null) { // if null, no record in the database
       throw new SignUpException("duplicate username");
     }
     if (userDao.getUserByEmail(user.getEmail()) != null) {

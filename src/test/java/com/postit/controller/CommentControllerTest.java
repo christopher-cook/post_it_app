@@ -28,7 +28,6 @@ import com.postit.entity.Comment;
 import com.postit.entity.Post;
 import com.postit.entity.User;
 import com.postit.service.CommentService;
-import com.postit.service.PostService;
 import com.postit.utils.SecurityUtils;
 
 public class CommentControllerTest {
@@ -81,6 +80,16 @@ public class CommentControllerTest {
             .andExpect(content().json("{\"commentId\":2,\"text\":\"test\",\"user\":{}}"))
             .andReturn();
         System.out.println(result.getResponse().getContentAsString());
+	}
+	
+	@Test
+	public void deleteComment_ById_Success() throws Exception {
+		RequestBuilder requestBuilder = MockMvcRequestBuilders.delete("/comment/1");
+		
+		when(commentService.deleteComment(anyString(), anyLong())).thenReturn(2L);
+		
+		MvcResult result = mockMvc.perform(requestBuilder).andExpect(content().string("2")).andReturn();
+		System.out.println(result.getResponse().getContentAsString());
 	}
 	
 	private String createJson(String text) {

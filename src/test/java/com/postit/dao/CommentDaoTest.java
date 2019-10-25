@@ -90,9 +90,10 @@ public class CommentDaoTest {
 //  @Test
 //  public void deleteComments_Comment_Success() throws EntityNotFoundException {
 //
-//    when(session.get(any(Class.class), anyLong())).thenReturn(comment);
+//	when(sessionFactory.getCurrentSession()).thenReturn(session);
 //    Long deletedCommentId = commentDao.deleteComment("user1", 1L);
-////    assertEquals((long) 1L, (long) deletedCommentId);
+//    assertEquals(comment.)
+//    	
 //  }
   
   @Test(expected=EntityNotFoundException.class)

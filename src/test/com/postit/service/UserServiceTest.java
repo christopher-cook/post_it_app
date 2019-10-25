@@ -25,6 +25,8 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.postit.config.JwtUtil;
 import com.postit.dao.UserDao;
+import com.postit.entity.Comment;
+import com.postit.entity.Post;
 import com.postit.entity.User;
 import com.postit.entity.UserRole;
 import com.postit.exception.EmptyFieldException;
@@ -42,6 +44,12 @@ public class UserServiceTest {
 
   @InjectMocks
   private User user;
+  
+  @InjectMocks
+  private Post post;
+  
+  @InjectMocks
+  private Comment comment;
 
   @Mock
   UserDao userDao;
@@ -52,8 +60,13 @@ public class UserServiceTest {
   @Mock
   private PasswordEncoder bCryptPasswordEncoder;
 
+  List<Post> postList;
+  List<Comment> commentList;
   @Before
   public void initMockBuild() {
+    
+    postList = new ArrayList<Post>();
+    commentList = new ArrayList<Comment>();
 
     UserRole userRole = new UserRole();
 
@@ -63,6 +76,13 @@ public class UserServiceTest {
     user.setUsername("testUser");
     user.setPassword("testPass");
     user.setUserRole(userRole);
+    
+    post.setPostId(1L);
+    post.setTitle("title");
+    post.setDescription("content");
+
+    comment.setCommentId(1L);
+    comment.setText("comment");
   }
 
   @Test
@@ -105,6 +125,19 @@ public class UserServiceTest {
 
     User wrongUserNoUsername = new User();
     userService.login(wrongUserNoUsername); // empty/missing email exception
+  }
+  
+  @Test(expected = LoginException.class)
+  public void login_WrongUsernamePwd_LoginException()
+      throws EmptyFieldException, LoginException, EntityNotFoundException {
+
+    User user = new User();
+    user.setEmail("email1@email.com");
+    user.setPassword("pwd1");
+    
+    when(userDao.login(any())).thenReturn(null);
+    
+    userService.login(user);
   }
 
   @Test(expected = SignUpException.class)
@@ -189,4 +222,26 @@ public class UserServiceTest {
     userService.loadUserByUsername("batman");
   }
 
+  @Test 
+  public void getPostsByUser_PostList_Success(){
+    postList.add(post);
+    when(userDao.getPostsByUser(anyString())).thenReturn(postList);
+    List<Post> actualPostList = userService.getPostsByUser("user1");
+    assertEquals(1, actualPostList.size());
+  }
+  
+  @Test 
+  public void getCommentsByUser_CommentList_Success(){
+    commentList.add(comment);
+    when(userDao.getCommentsByUser(anyString())).thenReturn(commentList);
+    List<Comment> actualCommentList = userService.getCommentsByUser("user1");
+    assertEquals(1, actualCommentList.size());
+  }
+  
+  @Test
+  public void getUserByUsername_User_Success(){
+    when(userDao.getUserByUsername(anyString())).thenReturn(user);
+    User actualUser = userService.getUserByUsername("user1");
+    assertEquals("testUser", actualUser.getUsername());
+  }
 }

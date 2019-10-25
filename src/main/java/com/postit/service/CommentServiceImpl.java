@@ -16,12 +16,6 @@ public class CommentServiceImpl implements CommentService {
   private CommentDao commentDao;
 
   @Override
-  public List<Comment> listComments() {
-
-    return commentDao.listComments();
-  }
-
-  @Override
   public Comment createComment(String username, Comment comment, Long postId) {
     return commentDao.createComment(username, comment, postId);
   }

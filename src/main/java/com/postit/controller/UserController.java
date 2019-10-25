@@ -60,17 +60,17 @@ public class UserController {
     return userService.listUsers();
   }
 
-  @GetMapping("/{userId}")
-  public User getUserByUserId(@PathVariable Long userId) {
-
-    return userService.getUserByUserId(userId);
-  }
-
-  @DeleteMapping("/{userId}")
-  public Long deleteUser(@PathVariable Long userId) {
-
-    return userService.deleteUser(userId);
-  }
+//  @GetMapping("/{userId}")
+//  public User getUserByUserId(@PathVariable Long userId) {
+//
+//    return userService.getUserByUserId(userId);
+//  }
+//
+//  @DeleteMapping("/{userId}")
+//  public Long deleteUser(@PathVariable Long userId) {
+//
+//    return userService.deleteUser(userId);
+//  }
 
   @GetMapping("/post")
   public List<Post> getPostsByUser() {

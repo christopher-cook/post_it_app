@@ -34,138 +34,176 @@ import com.postit.exception.SignUpException;
 @RunWith(MockitoJUnitRunner.class)
 public class UserDaoTest {
 
-	private MockMvc mockMvc;
+  private MockMvc mockMvc;
 
-	@InjectMocks
-	private User user;
+  @InjectMocks
+  private User user;
 
+  @InjectMocks
+  private Post post;
 
-	@InjectMocks
-	private UserRole userRole;
+  @InjectMocks
+  private Comment comment;
 
-	@Mock
-	private UserRoleDao userRoleDao;
+  @InjectMocks
+  private UserRole userRole;
 
-	@InjectMocks
-    private UserDaoImpl userDao;
+  @Mock
+  private UserRoleDao userRoleDao;
 
-	@Mock
-	private SessionFactory sessionFactory;
+  @InjectMocks
+  private UserDaoImpl userDao;
 
-	@Mock
-	private Session session;
+  @Mock
+  private SessionFactory sessionFactory;
 
-	@Mock
-	private Transaction transaction;
+  @Mock
+  private Session session;
 
-	@Mock
-	private Query<User> query;
+  @Mock
+  private Transaction transaction;
 
-	@Mock
-	private List<Post> postList;
-	
-	private List<Comment> commentList;
+  @Mock
+  private Query<User> query;
 
+  private List<User> userList;
+  private List<Post> postList;
+  private List<Comment> commentList;
 
-	@Before
-	public void initSession() {
-	   when(sessionFactory.getCurrentSession()).thenReturn(session);
-	   when(session.getTransaction()).thenReturn(transaction);
-	}
+  @Before
+  public void initSession() {
 
-	@Before
-	public void initTestUser() {
-		postList = new ArrayList<Post>();
-		commentList = new ArrayList<Comment>();
-		
-		userRole.setRoleId(1);
-        userRole.setName("ROLE_ADMIN");
-        user.setUserId(1L);
-        user.setUsername("chris");
-        user.setEmail("testEmail");
-        user.setPassword("testPass");
-        user.setUserRole(userRole);
-	}
+    when(sessionFactory.getCurrentSession()).thenReturn(session);
+    when(session.getTransaction()).thenReturn(transaction);
+  }
 
-	@Test
-	public void signup_User_Success() throws SignUpException {
-		when(userRoleDao.getRole(anyString())).thenReturn(userRole);
+  @Before
+  public void initTestUser() {
 
-		User tempUser = userDao.signup(user);
-        assertEquals(tempUser.getUsername(), user.getUsername());
-	}
+    userList = new ArrayList<User>();
+    postList = new ArrayList<Post>();
+    commentList = new ArrayList<Comment>();
 
-	@Test
-	public void login_User_Success() throws EntityNotFoundException {
-		when(session.createQuery(anyString())).thenReturn(query);
-		when(query.getSingleResult()).thenReturn(user);
+    userRole.setRoleId(1);
+    userRole.setName("ROLE_ADMIN");
+    user.setUserId(1L);
+    user.setUsername("chris");
+    user.setEmail("testEmail");
+    user.setPassword("testPass");
+    user.setUserRole(userRole);
 
-		User savedUser = userDao.login(user);
-		assertEquals(savedUser, user);
-	}
+    post.setPostId(1L);
+    post.setTitle("title");
+    post.setDescription("content");
 
-	@Test
-	public void getUser_ByUsername_Success() {
+    comment.setCommentId(1L);
+    comment.setText("comment");
 
-		when(session.createQuery(anyString())).thenReturn(query);
-		when(query.uniqueResult()).thenReturn(user);
+  }
 
-		User tempUser = userDao.getUserByUsername(user.getUsername());
-		 assertEquals("chris", tempUser.getUsername());
-	}
+  @Test
+  public void signUp_User_Success() throws SignUpException {
 
-	@Test
-	public void getUser_ByEmail_Success() {
+    when(userRoleDao.getRole(anyString())).thenReturn(userRole);
 
-		when(session.createQuery(anyString())).thenReturn(query);
-		when(query.uniqueResult()).thenReturn(user);
+    User tempUser = userDao.signup(user);
+    assertEquals(tempUser.getUsername(), user.getUsername());
+  }
 
-		User tempUser = userDao.getUserByEmail(user.getEmail());
-		assertEquals("testEmail", tempUser.getEmail());
-	}
+  @Test(expected = SignUpException.class)
+  public void signUp_User_SignUpException() throws SignUpException {
 
-	@Test
-	public void getUser_ById_Success() {
-		when(session.createQuery(anyString())).thenReturn(query);
-		when(query.uniqueResult()).thenReturn(user);
+    when(session.save(any(User.class))).thenThrow(new RuntimeException("test"));
+    userDao.signup(user);
+  }
 
-		User tempUser = userDao.getUserByUserId(user.getUserId());
-		assertEquals(new Long(1), tempUser.getUserId());
-	}
+  @Test
+  public void login_User_Success() throws EntityNotFoundException {
 
-	@Test
-	public void getPost_ByUser_Success() {
-		postList.add(new Post());
+    when(session.createQuery(anyString())).thenReturn(query);
+    when(query.getSingleResult()).thenReturn(user);
 
-		user.setPostList(postList);
-		when(session.createQuery(anyString())).thenReturn(query);
-		when(query.uniqueResult()).thenReturn(user);
+    User savedUser = userDao.login(user);
+    assertEquals(savedUser, user);
+  }
 
-		List<Post> actualPosts = userDao.getPostsByUser("user1");
-		assertEquals(1, actualPosts.size());
-	}
+  @Test(expected = EntityNotFoundException.class)
+  public void login_User_LoginException() throws EntityNotFoundException {
 
-	@Test
-	public void listAll_Users_Success() {
+    when(session.createQuery(anyString())).thenReturn(query);
+    when(query.getSingleResult()).thenThrow(new RuntimeException());
 
-	}
+    userDao.login(user);
+  }
 
-	@Test
-	public void deleteUser_ById_Success() {
+  @Test
+  public void getUser_ByUsername_Success() {
 
-	}
+    when(session.createQuery(anyString())).thenReturn(query);
+    when(query.uniqueResult()).thenReturn(user);
 
-	@Test
-	public void getComment_ByUsername_Success() {
-		commentList.add(new Comment());
+    User tempUser = userDao.getUserByUsername(user.getUsername());
+    assertEquals("chris", tempUser.getUsername());
+  }
 
-		user.setCommentList(commentList);	//set the list to user
-		when(session.createQuery(anyString())).thenReturn(query);
-		when(query.uniqueResult()).thenReturn(user);
+  @Test
+  public void getUser_ByEmail_Success() {
 
-		List<Comment> actualComment = userDao.getCommentsByUser("user1");
-		assertEquals(1, actualComment.size());
-	}
+    when(session.createQuery(anyString())).thenReturn(query);
+    when(query.uniqueResult()).thenReturn(user);
 
+    User tempUser = userDao.getUserByEmail(user.getEmail());
+    assertEquals("testEmail", tempUser.getEmail());
+  }
+
+  @Test
+  public void getUser_ById_Success() {
+
+    when(session.createQuery(anyString())).thenReturn(query);
+    when(query.uniqueResult()).thenReturn(user);
+
+    User tempUser = userDao.getUserByUserId(user.getUserId());
+    assertEquals(new Long(1), tempUser.getUserId());
+  }
+
+  @Test
+  public void getPost_ByUser_Success() {
+
+    postList.add(new Post());
+
+    user.setPostList(postList);
+    when(session.createQuery(anyString())).thenReturn(query);
+    when(query.uniqueResult()).thenReturn(user);
+
+    List<Post> actualPosts = userDao.getPostsByUser("user1");
+    assertEquals(1, actualPosts.size());
+  }
+
+  @Test
+  public void getComment_ByUsername_Success() {
+
+    commentList.add(new Comment());
+
+    user.setCommentList(commentList); // set the list to user
+    when(session.createQuery(anyString())).thenReturn(query);
+    when(query.uniqueResult()).thenReturn(user);
+
+    List<Comment> actualComment = userDao.getCommentsByUser("user1");
+    assertEquals(1, actualComment.size());
+  }
+
+  @Test
+  public void listUsers_UserList_Success() {
+
+    userList.add(user);
+
+    when(session.createQuery(anyString())).thenReturn(query);
+    when(query.getResultList()).thenReturn(userList);
+
+    List<User> actualUserList = userDao.listUsers();
+
+    assertEquals(userList, actualUserList);
+
+  }
 
 }

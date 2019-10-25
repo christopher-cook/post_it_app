@@ -62,7 +62,8 @@ public class UserServiceImpl implements UserService {
   public String signup(User user) throws SignUpException, EmptyFieldException {
 
     user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-    if (userDao.getUserByUsername(user.getUsername()) != null) { // if null, no record in the database
+    if (userDao.getUserByUsername(user.getUsername()) != null) { // if null, no record in the
+                                                                 // database
       throw new SignUpException("duplicate username");
     }
     if (userDao.getUserByEmail(user.getEmail()) != null) {
@@ -77,7 +78,8 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public String login(User user) throws LoginException, EntityNotFoundException, EmptyFieldException {
+  public String login(User user)
+      throws LoginException, EntityNotFoundException, EmptyFieldException {
 
     if (user.getEmail() == null || user.getEmail().length() == 0) {
       throw new EmptyFieldException("empty/missing email");
@@ -94,12 +96,6 @@ public class UserServiceImpl implements UserService {
     }
     System.out.println("username/password invalid");
     throw new LoginException("username/password invalid");
-  }
-
-  @Override
-  public Long deleteUser(Long userId) {
-
-    return userDao.deleteUser(userId);
   }
 
   @Override

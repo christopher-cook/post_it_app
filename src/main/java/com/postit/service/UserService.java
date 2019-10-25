@@ -16,9 +16,8 @@ public interface UserService extends UserDetailsService {
 
   public String signup(User user) throws SignUpException, EmptyFieldException;
 
-  public String login(User user) throws LoginException, EntityNotFoundException, EmptyFieldException;
-
-  public Long deleteUser(Long userId);
+  public String login(User user)
+      throws LoginException, EntityNotFoundException, EmptyFieldException;
 
   public List<User> listUsers();
 

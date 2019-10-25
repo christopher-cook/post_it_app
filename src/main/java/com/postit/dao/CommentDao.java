@@ -6,8 +6,6 @@ import com.postit.entity.Comment;
 import com.postit.exception.EntityNotFoundException;
 
 public interface CommentDao {
-	
-		public List<Comment> listComments();
 
 		public Comment createComment(String username, Comment comment, Long postId);
 		

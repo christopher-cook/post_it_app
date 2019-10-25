@@ -22,25 +22,6 @@ public class CommentDaoImpl implements CommentDao {
   private UserDao userDao;
 
   @Override
-  public List<Comment> listComments() {
-
-    List<Comment> comment = null;
-
-    Session session = sessionFactory.getCurrentSession();
-
-    try {
-      session.beginTransaction();
-
-      session.save(comment);
-
-      session.getTransaction().commit();
-    } finally {
-      session.close();
-    }
-    return comment;
-  }
-
-  @Override
   public Comment createComment(String username, Comment comment, Long postId) {
 
     User user = userDao.getUserByUsername(username);
@@ -71,7 +52,9 @@ public class CommentDaoImpl implements CommentDao {
     try {
       session.beginTransaction();
 
-      comment = session.get(Comment.class, commentId);
+//      comment = (Comment) session.createQuery("FROM Comment where comment_id=" + commentId + "")
+//          .uniqueResult();
+       comment = session.get(Comment.class, commentId);
       if (comment.getUser().getUsername().equals(username)) {
         // remove association with post and user
         // solve deleted object would be re-saved by cascade (remove deleted object from
@@ -83,13 +66,13 @@ public class CommentDaoImpl implements CommentDao {
         // end
         session.delete(comment);
         session.getTransaction().commit();
-      }else{
+      } else {
         throw new EntityNotFoundException("this comment not owned by the user");
       }
-    } catch(EntityNotFoundException | NullPointerException e){
+    } catch (EntityNotFoundException | NullPointerException e) {
       throw new EntityNotFoundException("this comment not exist/not owned by the user");
-    }finally {
-    
+    } finally {
+
       session.close();
     }
     return commentId;

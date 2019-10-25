@@ -38,8 +38,7 @@ public class UserDaoImpl implements UserDao {
       session.save(user);
 
       session.getTransaction().commit();
-    }
-    catch (Exception e) {
+    } catch (Exception e) {
       throw new SignUpException(e.getMessage());
     } finally {
       session.close();
@@ -141,25 +140,6 @@ public class UserDaoImpl implements UserDao {
   }
 
   @Override
-  public Long deleteUser(Long userId) {
-
-    Session session = sessionFactory.getCurrentSession();
-    User user = null;
-
-    try {
-      session.beginTransaction();
-
-      user = session.get(User.class, userId);
-      session.delete(user);
-
-      session.getTransaction().commit();
-    } finally {
-      session.close();
-    }
-    return userId;
-  }
-
-  @Override
   public List<Post> getPostsByUser(String username) {
 
     List<Post> postList = null;
@@ -195,6 +175,7 @@ public class UserDaoImpl implements UserDao {
 
   @Override
   public User getUserByUsernameForUserDetails(String username) {
+
     return this.getUserByUsername(username);
   }
 

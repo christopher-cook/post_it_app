@@ -14,8 +14,6 @@ public interface UserDao {
 
   public User login(User user) throws EntityNotFoundException;
 
-  public Long deleteUser(Long userId);
-
   public List<User> listUsers();
 
   public User getUserByUsername(String username);

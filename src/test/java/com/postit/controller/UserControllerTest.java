@@ -26,41 +26,41 @@ import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class UserControllerTest {
-	
+
 	private MockMvc mockMvc;
-	
+
 	@InjectMocks
 	UserController userController;
-	
+
 	@InjectMocks
 	User user;
-	
+
 	@Mock
 	UserService userService;
-	
+
 	@Before
 	public void initMockBuild() {
 		mockMvc = MockMvcBuilders.standaloneSetup(userController).build();
-		
+
 		user.setEmail("testEmail");
 		user.setPassword("testPass");
 		user.setUsername("testUser");
 	}
-	
+
 	@Test
 	public void signup_User_Success() throws Exception {
 		RequestBuilder requestBuilder = MockMvcRequestBuilders
 				.post("/user/signup")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(createUserJson("testEmail", "testUser", "testPass"));
-		
+
 		when(userService.signup(any())).thenReturn("testReturnString");
-		
+
 		MvcResult result = mockMvc.perform(requestBuilder)
 				.andExpect(status().isOk())
 				.andExpect(content().json("{\"token\":\"testReturnString\"}"))
 				.andReturn();
-		
+
 		System.out.println(result.getResponse().getContentAsString());
 	}
 
@@ -68,20 +68,23 @@ public class UserControllerTest {
 		return "{ \"email\": \"" + email + "\", " + "\"username\": \"" + username + "\", " +
                 "\"password\":\"" + password + "\"}";
 	}
-	
+
 	@Test
 	public void login_User_Success() throws Exception {
 		RequestBuilder requestBuilder = MockMvcRequestBuilders
 				.post("/user/login")
 				.contentType(MediaType.APPLICATION_JSON)
-				.content(createUserJson("testEmail", "testUser", "testPass"));
-		
-		
+				.content(createUserJson("testEmail@email.com", "testUser", "testPass"));
+
+
 		when(userService.login(any())).thenReturn("testString");
-		
+		when(userService.getUserByEmail(anyString())).thenReturn(user);
+
+
 		MvcResult result = mockMvc.perform(requestBuilder)
 				.andExpect(status().isOk())
-				.andExpect(content().json("{\"token\":\"testString\"}"))
+				.andExpect(content().json("{\"username\":\"testUser\", \"token\":\"testString\"}"))
 				.andReturn();
+
 	}
 }

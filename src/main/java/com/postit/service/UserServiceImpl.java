@@ -39,7 +39,7 @@ public class UserServiceImpl implements UserService {
   @Override
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-    User user = userDao.getUserByUsername(username);
+    User user = userDao.getUserByUsernameForUserDetails(username);
 
     if (user == null)
       throw new UsernameNotFoundException("Unknown user: " + username);
@@ -70,7 +70,6 @@ public class UserServiceImpl implements UserService {
     }
     if (userDao.signup(user).getUserId() != null) {
       UserDetails userDetails = loadUserByUsername(user.getUsername());
-
       return jwtUtil.generateToken(userDetails);
     } else {
       throw new SignUpException("signup failed");

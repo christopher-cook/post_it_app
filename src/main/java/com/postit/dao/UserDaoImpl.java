@@ -193,4 +193,9 @@ public class UserDaoImpl implements UserDao {
     return commentList;
   }
 
+  @Override
+  public User getUserByUsernameForUserDetails(String username) {
+    return this.getUserByUsername(username);
+  }
+
 }

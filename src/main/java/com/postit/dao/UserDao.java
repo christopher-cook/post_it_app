@@ -27,4 +27,6 @@ public interface UserDao {
   public List<Post> getPostsByUser(String username);
 
   public List<Comment> getCommentsByUser(String username);
+
+  public User getUserByUsernameForUserDetails(String username);
 }

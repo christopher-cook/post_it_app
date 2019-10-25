@@ -10,11 +10,16 @@ import java.util.List;
 
 import org.hibernate.Session;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.MockitoRule;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -27,13 +32,16 @@ import com.postit.exception.EntityNotFoundException;
 import com.postit.exception.LoginException;
 import com.postit.exception.SignUpException;
 
-@RunWith(MockitoJUnitRunner.class)
 public class UserServiceTest {
 
-  private MockMvc mockMvc;
+  @Rule
+  public MockitoRule rule = MockitoJUnit.rule().silent();
 
   @InjectMocks
   UserServiceImpl userService;
+
+  @InjectMocks
+  private User user;
 
   @Mock
   UserDao userDao;
@@ -43,12 +51,6 @@ public class UserServiceTest {
 
   @Mock
   private PasswordEncoder bCryptPasswordEncoder;
-
-  @InjectMocks
-  private User user;
-
-  @Mock
-  private Session session;
 
   @Before
   public void initMockBuild() {
@@ -70,6 +72,7 @@ public class UserServiceTest {
 
     when(userDao.signup(any())).thenReturn(user);
     when(userDao.getUserByUsername(anyString())).thenReturn(null);
+    when(userDao.getUserByUsernameForUserDetails(anyString())).thenReturn(user);
     when(jwtUtil.generateToken(any())).thenReturn(expectedToken);
     when(bCryptPasswordEncoder.encode(anyString())).thenReturn("testPass");
 
@@ -86,6 +89,7 @@ public class UserServiceTest {
 
     when(userDao.login(any())).thenReturn(user);
     when(userDao.getUserByUsername(anyString())).thenReturn(user);
+    when(userDao.getUserByUsernameForUserDetails(anyString())).thenReturn(user);
     when(jwtUtil.generateToken(any())).thenReturn(expectedToken);
     when(bCryptPasswordEncoder.encode(user.getPassword())).thenReturn("testPass");
     when(bCryptPasswordEncoder.matches(any(), any())).thenReturn(true);
@@ -126,10 +130,9 @@ public class UserServiceTest {
   }
 
   @Test(expected = SignUpException.class)
-  public void signup_DuplicateId_Caught() throws SignUpException, EmptyFieldException {
-    // User duplicateUser = new User();
-    // duplicateUser.setUserId(new Long(1));
+  public void signup_DuplicateUsername_Caught() throws SignUpException, EmptyFieldException {
 
+    when(userDao.getUserByUsername(anyString())).thenReturn(user);
     when(userDao.getUserByUserId(any())).thenReturn(user);
 
     userService.signup(user);
@@ -165,6 +168,25 @@ public class UserServiceTest {
     User actualUser = userService.getUserByEmail("testUser");
 
     assertEquals(actualUser, user);
+  }
+
+  @Test
+  public void loadUserByUsername_UserDetails_Success() {
+
+    when(userDao.getUserByUsernameForUserDetails(anyString())).thenReturn(user);
+    when(bCryptPasswordEncoder.encode(user.getPassword())).thenReturn("robin");
+
+    UserDetails userDetails = userService.loadUserByUsername("batman");
+
+    assertEquals(user.getUsername(), userDetails.getUsername());
+  }
+
+  @Test(expected = UsernameNotFoundException.class)
+  public void loadUserByUsername_UserDetails_UserNotFound() {
+
+    // when(userDao.getUserByUsername(anyString())).thenReturn(null);
+
+    userService.loadUserByUsername("batman");
   }
 
 }

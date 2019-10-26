@@ -23,14 +23,11 @@ import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import com.postit.config.JwtUtil;
 import com.postit.entity.Comment;
 import com.postit.entity.Post;
 import com.postit.entity.User;
 import com.postit.service.UserService;
 import com.postit.utils.SecurityUtils;
-
-import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class UserControllerTest {
@@ -90,14 +87,7 @@ public class UserControllerTest {
 
     MvcResult result = mockMvc.perform(requestBuilder).andExpect(status().isOk())
         .andExpect(content().json("{\"token\":\"testReturnString\"}")).andReturn();
-
     System.out.println(result.getResponse().getContentAsString());
-  }
-
-  private static String createUserJson(String email, String username, String password) {
-
-    return "{ \"email\": \"" + email + "\", " + "\"username\": \"" + username + "\", "
-        + "\"password\":\"" + password + "\"}";
   }
 
   @Test
@@ -113,22 +103,21 @@ public class UserControllerTest {
     MvcResult result = mockMvc.perform(requestBuilder).andExpect(status().isOk())
         .andExpect(content().json("{\"username\":\"testUser\", \"token\":\"testString\"}"))
         .andReturn();
-
+    System.out.println(result.getResponse().getContentAsString());
   }
 
   @Test
   public void listUsers_UserList_Success() throws Exception {
 
     userList.add(user);
+    
     when(userService.listUsers()).thenReturn(userList);
 
     RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/user/list");
 
     MvcResult result = mockMvc.perform(requestBuilder)
         .andExpect(content().json("[{\"username\":\"testUser\"}]")).andReturn();
-
     System.out.println(result.getResponse().getContentAsString());
-
   }
 
   @Test
@@ -145,9 +134,7 @@ public class UserControllerTest {
         .andExpect(content()
             .json("[{\"postId\":1,\"title\":\"title\",\"description\":\"content\",\"user\":null}]"))
         .andReturn();
-
     System.out.println(result.getResponse().getContentAsString());
-
   }
 
   @Test
@@ -163,8 +150,12 @@ public class UserControllerTest {
     MvcResult result = mockMvc.perform(requestBuilder)
         .andExpect(content().json("[{\"commentId\":1,\"text\":\"comment\",\"user\":null}]"))
         .andReturn();
-
     System.out.println(result.getResponse().getContentAsString());
+  }
 
+  private static String createUserJson(String email, String username, String password) {
+
+    return "{ \"email\": \"" + email + "\", " + "\"username\": \"" + username + "\", "
+        + "\"password\":\"" + password + "\"}";
   }
 }

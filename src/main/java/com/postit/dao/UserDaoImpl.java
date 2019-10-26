@@ -30,7 +30,6 @@ public class UserDaoImpl implements UserDao {
     UserRole userRole = userRoleDao.getRole(roleName);
 
     Session session = sessionFactory.getCurrentSession();
-
     try {
       session.beginTransaction();
 
@@ -43,7 +42,6 @@ public class UserDaoImpl implements UserDao {
     } finally {
       session.close();
     }
-
     return user;
   }
 
@@ -55,7 +53,6 @@ public class UserDaoImpl implements UserDao {
     Session session = sessionFactory.getCurrentSession();
     try {
       session.beginTransaction();
-
       savedUser = (User) session
           .createQuery("FROM User u WHERE u.email = '" + user.getEmail() + "'").getSingleResult();
     } catch (Exception e) {
@@ -63,19 +60,18 @@ public class UserDaoImpl implements UserDao {
     } finally {
       session.close();
     }
-
     return savedUser;
   }
 
+  @SuppressWarnings("unchecked")
   @Override
   public List<User> listUsers() {
 
-    List<User> allUsers = null; // init list
-    Session session = sessionFactory.getCurrentSession();
+    List<User> allUsers = null;
 
+    Session session = sessionFactory.getCurrentSession();
     try {
       session.beginTransaction();
-
       allUsers = session.createQuery("FROM User").getResultList();
     } finally {
       session.close();
@@ -89,16 +85,13 @@ public class UserDaoImpl implements UserDao {
     User user = null;
 
     Session session = sessionFactory.getCurrentSession();
-
     try {
       session.beginTransaction();
-
       user = (User) session.createQuery("FROM User u WHERE u.username = '" + username + "'")
           .uniqueResult();
     } finally {
       session.close();
     }
-
     return user;
   }
 
@@ -108,10 +101,8 @@ public class UserDaoImpl implements UserDao {
     User user = null;
 
     Session session = sessionFactory.getCurrentSession();
-
     try {
       session.beginTransaction();
-
       user = (User) session.createQuery("FROM User u WHERE u.userId = '" + userId + "'")
           .uniqueResult();
     } finally {
@@ -126,16 +117,13 @@ public class UserDaoImpl implements UserDao {
     User user = null;
 
     Session session = sessionFactory.getCurrentSession();
-
     try {
       session.beginTransaction();
-
       user =
           (User) session.createQuery("FROM User u WHERE u.email = '" + email + "'").uniqueResult();
     } finally {
       session.close();
     }
-
     return user;
   }
 
@@ -143,6 +131,7 @@ public class UserDaoImpl implements UserDao {
   public List<Post> getPostsByUser(String username) {
 
     List<Post> postList = null;
+
     Session session = sessionFactory.getCurrentSession();
     try {
       session.beginTransaction();
@@ -166,7 +155,6 @@ public class UserDaoImpl implements UserDao {
       User user = (User) session.createQuery("FROM User u WHERE u.username = '" + username + "'")
           .uniqueResult();
       commentList = user.getCommentList();
-
     } finally {
       session.close();
     }
@@ -178,5 +166,4 @@ public class UserDaoImpl implements UserDao {
 
     return this.getUserByUsername(username);
   }
-
 }

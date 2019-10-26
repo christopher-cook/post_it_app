@@ -16,8 +16,10 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @EnableWebMvc
 @ComponentScan("com.postit")
 public class AppConfig {
+
   @Bean
   public LocalSessionFactoryBean sessionFactory() {
+
     LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
 
     sessionFactory.setDataSource(dataSource());
@@ -29,6 +31,7 @@ public class AppConfig {
 
   @Bean
   public DataSource dataSource() {
+
     BasicDataSource dataSource = new BasicDataSource();
 
     dataSource.setDriverClassName("org.postgresql.Driver");
@@ -38,11 +41,12 @@ public class AppConfig {
   }
 
   private final Properties hibernateProperties() {
+
     Properties hibernateProperties = new Properties();
 
     hibernateProperties.setProperty("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
     hibernateProperties.setProperty("hibernate.current_session_context_class", "thread");
-//    hibernateProperties.setProperty("hibernate.hbm2ddl.auto", "create"); // create-drop update
+    // hibernateProperties.setProperty("hibernate.hbm2ddl.auto", "create"); // create-drop update
     hibernateProperties.setProperty("hibernate.show_sql", "true");
 
     return hibernateProperties;
@@ -50,10 +54,9 @@ public class AppConfig {
 
   @Bean
   public HibernateTransactionManager getTransactionManager() {
+
     HibernateTransactionManager transactionManager = new HibernateTransactionManager();
-
     transactionManager.setSessionFactory(sessionFactory().getObject());
-
     return transactionManager;
   }
 

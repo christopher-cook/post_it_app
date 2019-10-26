@@ -1,7 +1,5 @@
 package com.postit.dao;
 
-import java.util.List;
-
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,19 +49,14 @@ public class CommentDaoImpl implements CommentDao {
 
     try {
       session.beginTransaction();
-
-//      comment = (Comment) session.createQuery("FROM Comment where comment_id=" + commentId + "")
-//          .uniqueResult();
-       comment = session.get(Comment.class, commentId);
+      comment = session.get(Comment.class, commentId);
       if (comment.getUser().getUsername().equals(username)) {
-        // remove association with post and user
-        // solve deleted object would be re-saved by cascade (remove deleted object from
-        // associations)
+        // remove association with post and user : solve deleted object would be re-saved by cascade
         comment.getPost().getCommentList().remove(comment);
         comment.setPost(null);
         comment.getUser().getCommentList().remove(comment);
         comment.setUser(null);
-        // end
+
         session.delete(comment);
         session.getTransaction().commit();
       } else {
@@ -72,7 +65,6 @@ public class CommentDaoImpl implements CommentDao {
     } catch (EntityNotFoundException | NullPointerException e) {
       throw new EntityNotFoundException("this comment not exist/not owned by the user");
     } finally {
-
       session.close();
     }
     return commentId;

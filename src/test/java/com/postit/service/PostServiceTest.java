@@ -35,13 +35,13 @@ public class PostServiceTest {
 
   @InjectMocks
   private Comment comment;
-  
+
   @Mock
   private PostDao postDao;
 
   List<Post> postList;
   List<Comment> commentList;
-  
+
   @Before
   public void init() {
 
@@ -56,10 +56,8 @@ public class PostServiceTest {
     postList.add(post);
     commentList = new ArrayList<Comment>();
     commentList.add(comment);
-
   }
 
-  
   @Test
   public void createPost_newPost_Success() {
 
@@ -75,7 +73,7 @@ public class PostServiceTest {
     Long actualPostId = postService.deletePostByPostId("user1", 1L);
     assertEquals((long) 1L, (long) actualPostId);
   }
-  
+
   @Test
   public void listPosts_PostList_Success() throws EntityNotFoundException {
 
@@ -83,7 +81,7 @@ public class PostServiceTest {
     List<Post> actualPostList = postService.listPosts();
     assertEquals(postList, actualPostList);
   }
-  
+
   @Test
   public void getCommentsByPostId_CommentList_Success() throws EntityNotFoundException {
 
@@ -91,6 +89,4 @@ public class PostServiceTest {
     List<Comment> actualCommentList = postService.getCommentsByPostId(1L);
     assertEquals(commentList, actualCommentList);
   }
-  
-  
 }

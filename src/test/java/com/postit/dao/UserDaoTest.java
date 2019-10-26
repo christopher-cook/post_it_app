@@ -1,7 +1,6 @@
 package com.postit.dao;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -9,8 +8,6 @@ import java.util.List;
 
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.any;
-
-import javax.persistence.criteria.CriteriaUpdate;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -22,7 +19,6 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.test.web.servlet.MockMvc;
 
 import com.postit.entity.Comment;
 import com.postit.entity.Post;
@@ -33,8 +29,6 @@ import com.postit.exception.SignUpException;
 
 @RunWith(MockitoJUnitRunner.class)
 public class UserDaoTest {
-
-  private MockMvc mockMvc;
 
   @InjectMocks
   private User user;
@@ -98,7 +92,6 @@ public class UserDaoTest {
 
     comment.setCommentId(1L);
     comment.setText("comment");
-
   }
 
   @Test
@@ -203,7 +196,5 @@ public class UserDaoTest {
     List<User> actualUserList = userDao.listUsers();
 
     assertEquals(userList, actualUserList);
-
   }
-
 }

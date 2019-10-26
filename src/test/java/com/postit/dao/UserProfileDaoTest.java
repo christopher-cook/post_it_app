@@ -2,7 +2,6 @@ package com.postit.dao;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.when;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 
 import org.hibernate.Session;
@@ -62,7 +61,6 @@ public class UserProfileDaoTest {
     when(sessionFactory.getCurrentSession()).thenReturn(session);
     when(session.getTransaction()).thenReturn(transaction);
     when(userDao.getUserByUsername(anyString())).thenReturn(user);
-
   }
 
   @Test
@@ -72,20 +70,25 @@ public class UserProfileDaoTest {
 
     assertEquals(userProfile, actualUserProfile);
   }
-  
+
   @Test
-  public void getUserProfile_UserProfile_Success() throws EntityNotFoundException{
+  public void getUserProfile_UserProfile_Success() throws EntityNotFoundException {
+
     UserProfile actualUserProfile = userProfileDao.getUserProfile("user1");
+    assertEquals("user1", actualUserProfile.getUser().getUsername());
   }
-  
-  @Test(expected = EntityNotFoundException.class)
-  public void getUserProfile_UserProfile_EntityNotFound() throws EntityNotFoundException{
-    user.setUserProfile(null);
-    userProfileDao.getUserProfile("user1");
-  }
-  
+
   @Test
-  public void updateUserProfile_UserProfile_Success(){
+  public void getUserProfile_UserProfile_EntityNotFound() throws EntityNotFoundException {
+
+    user.setUserProfile(null);
+    UserProfile actualUserProfile = userProfileDao.getUserProfile("user1");
+    assertNull(actualUserProfile);
+  }
+
+  @Test
+  public void updateUserProfile_UserProfile_Success() {
+
     userProfile.setMobile("222222");
     UserProfile actualUserProfile = userProfileDao.updateProfile("user1", userProfile);
 

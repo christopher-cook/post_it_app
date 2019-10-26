@@ -19,17 +19,13 @@ public class UserRoleDaoImpl implements UserRoleDao {
     UserRole userRole = null;
 
     Session session = sessionFactory.getCurrentSession();
-
     try {
       session.beginTransaction();
-
       userRole = (UserRole) session
           .createQuery("FROM UserRole r WHERE r.name = '" + userRoleName + "'").uniqueResult();
     } finally {
       session.close();
     }
-
     return userRole;
   }
-
 }

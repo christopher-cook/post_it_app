@@ -48,12 +48,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
   @Bean
   CorsConfigurationSource corsConfigurationSource() {
 
+    //@formatter:off
     CorsConfiguration configuration = new CorsConfiguration();
     configuration.setAllowedOrigins(Arrays.asList("*"));
-    configuration
-        .setAllowedMethods(Arrays.asList("GET", "POST", "DELETE", "PUT"));
-    configuration.setAllowedHeaders(
-        Arrays.asList("X-Requested-With", "Origin", "Content-Type", "Accept", "Authorization", "cache-control"));
+    configuration.setAllowedMethods(Arrays.asList("GET", "POST", "DELETE", "PUT"));
+    configuration.setAllowedHeaders(Arrays.asList(
+        "X-Requested-With", "Origin", "Content-Type",
+        "Accept", "Authorization", "cache-control"));
+  //@formatter:on
     configuration.setAllowCredentials(true);
     UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
     source.registerCorsConfiguration("/**", configuration);
@@ -68,8 +70,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     .cors().and()
     .csrf().disable()
     .authorizeRequests()
-    .antMatchers("/user/signup/**", "/user/login/**", "/post/list/**", "/post/{\\d+}/comment/**").permitAll()
-    .antMatchers("/user/**", "/comment/**", "/post/**").authenticated()
+    .antMatchers("/user/signup/**", "/user/login/**", 
+                 "/post/list/**", "/post/{\\d+}/comment/**").permitAll()
+    .antMatchers("/user/**", "/comment/**", "/post/**", "/profile/**").authenticated()
     .and()
     .httpBasic().and().sessionManagement()
     .sessionCreationPolicy(SessionCreationPolicy.STATELESS);

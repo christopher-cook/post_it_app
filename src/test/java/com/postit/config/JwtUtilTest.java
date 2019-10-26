@@ -1,8 +1,6 @@
 package com.postit.config;
 
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -11,12 +9,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import static org.junit.Assert.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 public class JwtUtilTest {
@@ -41,6 +36,8 @@ public class JwtUtilTest {
 
     when(userDetails.getUsername()).thenReturn("user1");
     String token = jwtUtil.generateToken(userDetails);
+    assertNotNull(token);
+    assertTrue(token.length() > 0);
   }
 
   @Test
@@ -63,12 +60,13 @@ public class JwtUtilTest {
 
   @Test
   public void getExpirationDateFromToken_Date_Success() {
+
     when(userDetails.getUsername()).thenReturn("user1");
-//    when(System.currentTimeMillis()).thenReturn(System.currentTimeMillis() - 10 * 60 * 60 * 1000);
+
     String token = jwtUtil.generateToken(userDetails);
     Date expirationDate = jwtUtil.getExpirationDateFromToken(token);
     assertNotNull(expirationDate);
-//    System.out.println(expirationDate.toString());
+
     Date now = new Date(System.currentTimeMillis());
     assertTrue(now.before(expirationDate));
   }

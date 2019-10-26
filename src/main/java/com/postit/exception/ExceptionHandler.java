@@ -20,6 +20,7 @@ public class ExceptionHandler extends ResponseEntityExceptionHandler {
   }
 
   //@formatter:off
+  
   @Override
   protected ResponseEntity<Object> handleMethodArgumentNotValid(
       MethodArgumentNotValidException e,

@@ -1,7 +1,5 @@
 package com.postit.controller;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -19,18 +17,15 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import com.postit.entity.Comment;
 import com.postit.entity.Post;
-import com.postit.exception.EntityNotFoundException;
 import com.postit.service.PostService;
 import com.postit.utils.SecurityUtils;
 
@@ -106,7 +101,6 @@ public class PostControllerTest {
         .andExpect(content()
             .json("[{\"postId\":1,\"title\":\"title\",\"description\":\"content\",\"user\":null}]"))
         .andReturn();
-
     System.out.println(result.getResponse().getContentAsString());
   }
 

@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -88,13 +89,10 @@ public class ErrorResponseTest {
   }
 
   @Test
-  public void getTimestamp_TimestampString_Success() {
+  public void getTimestamp_TimestampString_Success() throws ParseException {
 
-    try {
-      new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(errorResponse.getTimestamp());
-    } catch (ParseException e) {
-      assertTrue(false);
-    }
+    Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(errorResponse.getTimestamp());
+    assertNotNull(date);
   }
 
   @Test

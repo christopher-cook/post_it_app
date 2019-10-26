@@ -1,7 +1,5 @@
 package com.postit.service;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +15,7 @@ public class CommentServiceImpl implements CommentService {
 
   @Override
   public Comment createComment(String username, Comment comment, Long postId) {
+
     return commentDao.createComment(username, comment, postId);
   }
 
@@ -25,5 +24,4 @@ public class CommentServiceImpl implements CommentService {
 
     return commentDao.deleteComment(username, commentId);
   }
-
 }

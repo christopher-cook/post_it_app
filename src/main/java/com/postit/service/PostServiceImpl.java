@@ -1,7 +1,6 @@
 package com.postit.service;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
@@ -14,8 +13,6 @@ import org.springframework.stereotype.Service;
 import com.postit.dao.PostDao;
 import com.postit.entity.Comment;
 import com.postit.entity.Post;
-import com.postit.entity.User;
-import com.postit.exception.EmptyFieldException;
 import com.postit.exception.EntityNotFoundException;
 
 @Service
@@ -54,5 +51,4 @@ public class PostServiceImpl implements PostService {
         .collect(Collectors.toList());
     return commentList;
   }
-
 }

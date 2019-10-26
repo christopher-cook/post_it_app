@@ -2,10 +2,7 @@ package com.postit.dao;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.when;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.anyObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,6 +66,10 @@ public class CommentDaoTest {
     user.setEmail("email1@email.com");
     user.setPassword("pwd1");
     user.setUsername("user1");
+
+    post.setPostId(1L);
+    post.setTitle("title");
+    post.setDescription("content");
     
     comment.setCommentId(1L);
     comment.setText("comment");
@@ -87,19 +88,9 @@ public class CommentDaoTest {
     assertEquals(comment.getCommentId(), actualComment.getCommentId());
   }
 
-//  @Test
-//  public void deleteComments_Comment_Success() throws EntityNotFoundException {
-//
-//	when(sessionFactory.getCurrentSession()).thenReturn(session);
-//    Long deletedCommentId = commentDao.deleteComment("user1", 1L);
-//    assertEquals(comment.)
-//    	
-//  }
-  
-  @Test(expected=EntityNotFoundException.class)
+  @Test(expected = EntityNotFoundException.class)
   public void deleteComments_Comment_CommentNotFound() throws EntityNotFoundException {
 
-    commentDao.deleteComment("user1", 1L);
+    commentDao.deleteComment("user1", comment.getPost().getPostId());
   }
-
 }

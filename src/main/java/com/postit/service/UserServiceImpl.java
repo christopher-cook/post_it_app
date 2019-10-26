@@ -17,7 +17,6 @@ import com.postit.dao.UserDao;
 import com.postit.entity.Comment;
 import com.postit.entity.Post;
 import com.postit.entity.User;
-import com.postit.entity.UserRole;
 import com.postit.exception.EmptyFieldException;
 import com.postit.exception.EntityNotFoundException;
 import com.postit.exception.LoginException;
@@ -52,9 +51,7 @@ public class UserServiceImpl implements UserService {
   private List<GrantedAuthority> getGrantedAuthorities(User user) {
 
     List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
-
     authorities.add(new SimpleGrantedAuthority(user.getUserRole().getName()));
-
     return authorities;
   }
 
@@ -62,8 +59,7 @@ public class UserServiceImpl implements UserService {
   public String signup(User user) throws SignUpException, EmptyFieldException {
 
     user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-    if (userDao.getUserByUsername(user.getUsername()) != null) { // if null, no record in the
-                                                                 // database
+    if (userDao.getUserByUsername(user.getUsername()) != null) {
       throw new SignUpException("duplicate username");
     }
     if (userDao.getUserByEmail(user.getEmail()) != null) {
@@ -91,7 +87,6 @@ public class UserServiceImpl implements UserService {
     if (foundUser != null && foundUser.getUserId() != null
         && bCryptPasswordEncoder.matches(user.getPassword(), foundUser.getPassword())) {
       UserDetails userDetails = loadUserByUsername(foundUser.getUsername());
-
       return jwtUtil.generateToken(userDetails);
     }
     System.out.println("username/password invalid");
@@ -102,7 +97,6 @@ public class UserServiceImpl implements UserService {
   public List<User> listUsers() {
 
     return userDao.listUsers();
-
   }
 
   @Override
@@ -133,7 +127,5 @@ public class UserServiceImpl implements UserService {
   public List<Comment> getCommentsByUser(String username) {
 
     return userDao.getCommentsByUser(username);
-
   }
-
 }

@@ -31,70 +31,73 @@ import com.postit.service.CommentService;
 import com.postit.utils.SecurityUtils;
 
 public class CommentControllerTest {
-	  @Rule
-	  public MockitoRule rule = MockitoJUnit.rule();
+  @Rule
+  public MockitoRule rule = MockitoJUnit.rule();
 
-	  private MockMvc mockMvc;
+  private MockMvc mockMvc;
 
-	  @InjectMocks
-	  private CommentController commentController;
+  @InjectMocks
+  private CommentController commentController;
 
-	  @InjectMocks
-	  private Post post;
+  @InjectMocks
+  private Post post;
 
-	  @InjectMocks
-	  private Comment comment;
-	  
-	  @InjectMocks
-	  User user;
+  @InjectMocks
+  private Comment comment;
 
-	  @Mock
-	  private SecurityUtils securityUtils;
+  @InjectMocks
+  User user;
 
-	  @Mock
-	  private CommentService commentService;
+  @Mock
+  private SecurityUtils securityUtils;
 
-	  List<Post> postList;
-	  List<Comment> commentList;
-	
-	  @Before
-	  public void init() {
-		  mockMvc = MockMvcBuilders.standaloneSetup(commentController).build();
-		  
-		  comment.setUser(user);
-		  comment.setCommentId(2L);
-		  comment.setPost(post);
-		  comment.setText("test");
-		  
-		  when(securityUtils.getAuthenticatedUsername()).thenReturn("user1");
-		  
-	  }
-	@Test
-	public void createComment_NewComment_Success() throws Exception {
-		RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/comment/1")
-            .contentType(MediaType.APPLICATION_JSON).content(createJson("comment"));
+  @Mock
+  private CommentService commentService;
 
-        when(commentService.createComment(anyString(), any(), anyLong())).thenReturn(comment);
+  List<Post> postList;
+  List<Comment> commentList;
 
-        MvcResult result = mockMvc.perform(requestBuilder).andExpect(status().isOk())
-            .andExpect(content().json("{\"commentId\":2,\"text\":\"test\",\"user\":{}}"))
-            .andReturn();
-        System.out.println(result.getResponse().getContentAsString());
-	}
-	
-	@Test
-	public void deleteComment_ById_Success() throws Exception {
-		RequestBuilder requestBuilder = MockMvcRequestBuilders.delete("/comment/1");
-		
-		when(commentService.deleteComment(anyString(), anyLong())).thenReturn(2L);
-		
-		MvcResult result = mockMvc.perform(requestBuilder).andExpect(content().string("2")).andReturn();
-		System.out.println(result.getResponse().getContentAsString());
-	}
-	
-	private String createJson(String text) {
+  @Before
+  public void init() {
 
-	    return "{\"text\":\"" + text + "\"}";
-	  }
-	
+    mockMvc = MockMvcBuilders.standaloneSetup(commentController).build();
+
+    comment.setUser(user);
+    comment.setCommentId(2L);
+    comment.setPost(post);
+    comment.setText("test");
+
+    when(securityUtils.getAuthenticatedUsername()).thenReturn("user1");
+  }
+
+  @Test
+  public void createComment_NewComment_Success() throws Exception {
+
+    RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/comment/1")
+        .contentType(MediaType.APPLICATION_JSON).content(createJson("comment"));
+
+    when(commentService.createComment(anyString(), any(), anyLong())).thenReturn(comment);
+
+
+    MvcResult result = mockMvc.perform(requestBuilder).andExpect(status().isOk())
+        .andExpect(content().json("{\"commentId\":2,\"text\":\"test\",\"user\":{}}")).andReturn();
+
+    System.out.println(result.getResponse().getContentAsString());
+  }
+
+  @Test
+  public void deleteComment_ById_Success() throws Exception {
+
+    RequestBuilder requestBuilder = MockMvcRequestBuilders.delete("/comment/1");
+
+    when(commentService.deleteComment(anyString(), anyLong())).thenReturn(2L);
+
+    MvcResult result = mockMvc.perform(requestBuilder).andExpect(content().string("2")).andReturn();
+    System.out.println(result.getResponse().getContentAsString());
+  }
+
+  private String createJson(String text) {
+
+    return "{\"text\":\"" + text + "\"}";
+  }
 }

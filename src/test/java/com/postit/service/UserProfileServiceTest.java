@@ -39,10 +39,6 @@ public class UserProfileServiceTest {
     userProfile.setAdditionalEmail("email1@email.com");
     userProfile.setMobile("111111");
     userProfile.setAddress("amazon");
-
-    // user.setUserId(1L);
-    // user.setUsername("user1");
-    // userProfile.setUser(user);
   }
 
   @Test
@@ -60,36 +56,42 @@ public class UserProfileServiceTest {
 
   @Test(expected = EmptyFieldException.class)
   public void createUserProfile_UserProfile_NoEmail() throws EmptyFieldException {
+
     userProfile.setAdditionalEmail(null);
     userProfileService.createProfile("user1", userProfile);
   }
-  
+
   @Test(expected = EmptyFieldException.class)
   public void createUserProfile_UserProfile_EmptyEmail() throws EmptyFieldException {
+
     userProfile.setAdditionalEmail("");
     userProfileService.createProfile("user1", userProfile);
   }
-  
+
   @Test(expected = EmptyFieldException.class)
   public void createUserProfile_UserProfile_NoMobile() throws EmptyFieldException {
+
     userProfile.setMobile(null);
     userProfileService.createProfile("user1", userProfile);
   }
-  
+
   @Test(expected = EmptyFieldException.class)
   public void createUserProfile_UserProfile_EmptyMobile() throws EmptyFieldException {
+
     userProfile.setMobile("");
     userProfileService.createProfile("user1", userProfile);
   }
-  
+
   @Test(expected = EmptyFieldException.class)
   public void createUserProfile_UserProfile_NoAddress() throws EmptyFieldException {
+
     userProfile.setAddress(null);
     userProfileService.createProfile("user1", userProfile);
   }
-  
+
   @Test(expected = EmptyFieldException.class)
   public void createUserProfile_UserProfile_EmptyAddress() throws EmptyFieldException {
+
     userProfile.setAddress("");
     userProfileService.createProfile("user1", userProfile);
   }
@@ -115,7 +117,9 @@ public class UserProfileServiceTest {
   public void getUserProfile_UserProfile_Success() throws EntityNotFoundException {
 
     when(userProfileDao.getUserProfile(anyString())).thenReturn(userProfile);
+    
     UserProfile actualUserProfile = userProfileService.getUserProfile("user1");
+    
     assertNotNull(actualUserProfile);
     assertEquals(userProfile.getProfileId(), actualUserProfile.getProfileId());
   }
@@ -125,6 +129,5 @@ public class UserProfileServiceTest {
 
     when(userProfileDao.getUserProfile(anyString())).thenThrow(EntityNotFoundException.class);
     userProfileService.getUserProfile("user1");
-
   }
 }

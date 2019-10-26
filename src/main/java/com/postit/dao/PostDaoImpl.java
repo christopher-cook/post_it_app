@@ -35,7 +35,6 @@ public class PostDaoImpl implements PostDao {
     } finally {
       session.close();
     }
-
     return post;
   }
 
@@ -47,12 +46,12 @@ public class PostDaoImpl implements PostDao {
     Session session = sessionFactory.getCurrentSession();
     try {
       session.beginTransaction();
-      Post post = session.get(Post.class, postId);
+      Post post = (Post) session.createQuery("From Post where postId="+postId).getSingleResult();
       if (post.getUser().getUsername().equals(user.getUsername())) {
         // solve deleted object would be re-saved by cascade (remove deleted object from associations)
         post.getUser().getPostList().remove(post);
         post.setUser(null);
-        //end
+
         session.delete(post);
         session.getTransaction().commit();
       }else{
@@ -60,9 +59,6 @@ public class PostDaoImpl implements PostDao {
       }
     } catch(EntityNotFoundException | NullPointerException e){
       throw new EntityNotFoundException("post entity not found / not owned by this user");
-    }catch(Exception e){
-      System.out.println(e);
-      throw e;
     }finally {
       session.close();
     }
@@ -82,7 +78,6 @@ public class PostDaoImpl implements PostDao {
     } finally {
       session.close();
     }
-
     return postList;
   }
 
@@ -94,7 +89,7 @@ public class PostDaoImpl implements PostDao {
     Session session = sessionFactory.getCurrentSession();
     try {
       session.beginTransaction();
-      Post post = session.get(Post.class, postId);
+      Post post = (Post) session.createQuery("From Post where postId="+postId).getSingleResult();
       if(post == null){
         throw new EntityNotFoundException("post entity doesn't exist");
       }

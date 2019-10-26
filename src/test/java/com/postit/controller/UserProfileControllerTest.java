@@ -8,17 +8,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnit;
-import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.junit.MockitoRule;
 import org.springframework.http.MediaType;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.RequestBuilder;
@@ -80,7 +74,7 @@ public class UserProfileControllerTest {
 
     MvcResult result = mockMvc.perform(requestBuilder).andExpect(status().isOk())
         .andExpect(content().json("{\"additionalEmail\":\"email1@email.com\"}")).andReturn();
-
+    System.out.println(result.getResponse().getContentAsString());
   }
 
   @Test
@@ -94,7 +88,7 @@ public class UserProfileControllerTest {
 
     MvcResult result = mockMvc.perform(requestBuilder).andExpect(status().isOk())
         .andExpect(content().json("{\"additionalEmail\":\"email1@email.com\"}")).andReturn();
-
+    System.out.println(result.getResponse().getContentAsString());
   }
 
   @Test
@@ -106,12 +100,11 @@ public class UserProfileControllerTest {
 
     MvcResult result = mockMvc.perform(requestBuilder).andExpect(status().isOk())
         .andExpect(content().json("{\"additionalEmail\":\"email1@email.com\"}")).andReturn();
-
+    System.out.println(result.getResponse().getContentAsString());
   }
 
   private String createJson(String email) {
 
     return "{\"additionalEmail\":\"" + email + "\"" + "}";
   }
-
 }

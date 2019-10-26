@@ -2,9 +2,10 @@ package com.postit.dao;
 
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -16,60 +17,61 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.test.web.servlet.MockMvc;
 
 import com.postit.entity.User;
-import com.postit.entity.UserProfile;
 import com.postit.entity.UserRole;
 
 @RunWith(MockitoJUnitRunner.class)
 public class UserRoleDaoTest {
-	
-	private MockMvc mockMvc;
+  @Mock
+  private SessionFactory sessionFactory;
 
-	@InjectMocks
-	User user;
-	
-	 @Mock
-	  private SessionFactory sessionFactory;
+  @Mock
+  private Session session;
 
-	  @Mock
-	  private Session session;
+  @Mock
+  private Transaction transaction;
 
-	  @Mock
-	  private Transaction transaction;
+  @Mock
+  private Query<UserRole> query;
 
-	  @InjectMocks
-	  UserRole userRole;
-	  
-	  @InjectMocks
-	  UserRoleDaoImpl userRoleDao;
-	  
-		@Mock
-		private Query<UserRole> query;
-	  
-	 @Before
-	 	public void init() {
-		 userRole.setName("ROLE_ADMIN");
-		 user.setUserId(1L);
-	     user.setUsername("user1");
-	     user.setUserRole(userRole);
-	    
-		 
-		when(sessionFactory.getCurrentSession()).thenReturn(session);
-//		when(session.getTransaction()).thenReturn(transaction);
-		
-	 }
-	  
-	  @Test
-	  public void getRole_ByName_Success() {
-		
-		  when(session.createQuery(anyString())).thenReturn(query);
-		  when(query.uniqueResult()).thenReturn(userRole);
-		  
-		  UserRole actualUserRole = userRoleDao.getRole("testRole");
-		  
-		  assertEquals(userRole.getName(), actualUserRole.getName());
+  @InjectMocks
+  UserRole userRole;
 
-	  }
+  @InjectMocks
+  UserRoleDaoImpl userRoleDao;
+
+  @InjectMocks
+  User user;
+
+  List<User> users;
+
+  @Before
+  public void init() {
+
+    users = new ArrayList<User>();
+
+    userRole.setName("ROLE_ADMIN");
+    user.setUserId(1L);
+    user.setUsername("user1");
+    user.setUserRole(userRole);
+    users.add(user);
+    userRole.setUsers(users);
+
+    when(sessionFactory.getCurrentSession()).thenReturn(session);
+  }
+
+  @Test
+  public void getRole_ByName_Success() {
+
+    when(session.createQuery(anyString())).thenReturn(query);
+    when(query.uniqueResult()).thenReturn(userRole);
+
+    UserRole actualUserRole = userRoleDao.getRole("testRole");
+
+    assertEquals(userRole.getRoleId(), actualUserRole.getRoleId());
+    assertEquals(userRole.getName(), actualUserRole.getName());
+    assertEquals(userRole.getUsers().get(0).getUserId(),
+        actualUserRole.getUsers().get(0).getUserId());
+  }
 }

@@ -38,6 +38,9 @@ The approach we took was to build out the User, Post, Comment, Profile layers in
 * [Pivitol tracker](https://www.pivotaltracker.com/n/projects/2407483)
   * User Stories/Wireframes
 * User Stories to break down requirements and concepts into features
+*** we broke down the features and steps into Epics, User Stories, and Tasks to manage the progress
+* Continuous Integration & Early Deliverables
+*** we kept on testing the functionality with postman and integrating the frontend to ensure the deliverables along the way
   
 ### Extreme Programming
 * Pair Programming

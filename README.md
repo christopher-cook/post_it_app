@@ -24,15 +24,11 @@ The approach we took was to build out the User, Post, Comment, Profile layers in
 
 ##### Database
 * ERD for the clarity of database entity relationship
-![ERD Diagram](https://i.imgur.com/l2DZYPq.png)
 
 ##### Software Architecture Design and Implementation
 * CRUD for designing routes
 * DRY (don't repeat yourself) and KISS (keep it simple, stupid)
 * UML to visualize the system structure
-
-### ERD
-![ERD Diagram](https://i.imgur.com/l2DZYPq.png)
 
 ### Agile Development
 * [Pivitol tracker](https://www.pivotaltracker.com/n/projects/2407483)
@@ -49,7 +45,28 @@ The approach we took was to build out the User, Post, Comment, Profile layers in
 * [Timeline](https://github.com/christopher-cook/post_it_app/wiki/Timeline)
 * [Trello]()
   * individual task assignments
-  
+
+### ERD
+![ERD Diagram](https://i.imgur.com/l2DZYPq.png)
+
+### Feature List
+
+| URL Pattern | Method | Description | Bearer Token Auth |
+| :---: | :---: | :---: | :---: |
+| /postit/user/signup | Post | Create Account | N |
+| /postit/user/login | Post | Login | N |
+| /postit/post/ | Post | Create Post for authenticated user | Y | 
+| /postit/post/{post_id} | Delete | Delete post by post id | Y |
+| /post/list | Get | Get all posts | N |
+| /postit/profile | Post | Create Profile for authenticated user | Y |
+| /postit/profile | Post | Update Profile for authenticated user | Y |
+| /postit/profile | Get | Get Profile for authenticated user | Y |
+| /postit/comment/{post_id} | Post | Create Comment by post id | Y |
+| /postit/comment/{comment_id} | Delete | Delete comment by comment id | Y |
+| /postit/user/post | Get | Get all posts by the authenticated user | Y |
+| /postit/post/{post_id}/comment | Get | Get comments by post id | N |
+
+
 ### Challenges:
 
 1. CORS

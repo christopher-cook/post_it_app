@@ -27,7 +27,7 @@ The approach we took was to build out the User, Post, Comment, Profile layers in
 
 ##### Software Architecture Design and Implementation
 * CRUD for designing routes
-* DRY (don't repeat yourself) and KISS (keep it simple, stupid)
+* DRY (don't repeat yourself) and KISS (keep it simple)
 * UML to visualize the system structure
 
 ### Agile Development

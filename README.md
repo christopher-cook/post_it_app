@@ -20,7 +20,7 @@ This is the backend program written in java providing backend functionality for 
 
 ### Approach
 
-The approach we took was to build out the User, Post, Comment, Profile layers in tandem with Auth thus allowing us to avoid code refactoring later on. Once basic functionality was met we began integrating the front-end application and handled exception handling via Postman. Unit Testing accounted for the breadth of our project as we tried to hit on every instruction not neccesarily just meet the minimum coverage. Final steps were to test making sure no breaks occurred during fetches and all exceptions were handled.
+The approach we took was to build out the User, Post, Comment, Profile layers in tandem with Auth thus allowing us to avoid code refactoring later on. Once basic functionality was met we began integrating the front-end application and dealt with exception handling via Postman. Unit Testing accounted for the breadth of our project as we tried to hit on every instruction not neccesarily just meet the minimum coverage. Final steps were to test making sure no breaks occurred during fetches and all exceptions were handled.
 
 ##### Database
 * ERD for the clarity of database entity relationship

@@ -43,8 +43,6 @@ The approach we took was to build out the User, Post, Comment, Profile layers in
 
 ### Time Management
 * [Timeline](https://github.com/christopher-cook/post_it_app/wiki/Timeline)
-* [Trello]()
-  * individual task assignments
 
 ### ERD
 ![ERD Diagram](https://i.imgur.com/l2DZYPq.png)
@@ -71,25 +69,25 @@ The approach we took was to build out the User, Post, Comment, Profile layers in
 
 1. CORS
  
- * When integrating front-end app came across a few different CORS related issues.
+  * When integrating front-end app came across a few different CORS related issues.
 
 2. Request Authentication and its unit test for controller
 
- * To extract the authentication information, we added one argument for the Authentication object in the controller functions.
+  * To extract the authentication information, we added one argument for the Authentication object in the controller functions.
 
- * Directly placing the Authentication object in controller function led to duplicate code and a harder setup for the unit test with mockito MVC builder, so we used SecurityContextHandler to get the authentication information in a separate function, which made the code isolated and easier for testing.
+  * Directly placing the Authentication object in controller function led to duplicate code and a harder setup for the unit test with mockito MVC builder, so we used SecurityContextHandler to get the authentication information in a separate function, which made the code isolated and easier for testing.
 
 3. Unit test for static methods and constructors
 
-* Mockito doesn't support mocking for static methods and constructors, we adopted PowerMockito partially to overcome this case.
+  * Mockito doesn't support mocking for static methods and constructors, we adopted PowerMockito partially to overcome this case.
 
 ### Future improvements
 
 1. User Role
 
-* The backend has only one role "ROLE_USER". For a better differentiation of user group, we need to implement more methods for UserRole entity.
+  * The backend has only one role "ROLE_USER". For a better differentiation of user group, we need to implement more methods for UserRole entity.
 
-* user signup needs a user role to obtain an authority level for security configuration, but we designed not to expose the user role setting to regular user, so we used a default role 'ROLE_USER' for user signing up and only Admin can user /role url to grant any other level of authorities.
+  * user signup needs a user role to obtain an authority level for security configuration, but we designed not to expose the user role setting to regular user, so we used a default role 'ROLE_USER' for user signing up and only Admin can user /role url to grant any other level of authorities.
 
 2. Higher unit testing coverage
 
